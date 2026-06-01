@@ -1,6 +1,8 @@
 package gestiontransports.model;
 
 import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Utilisateur")
@@ -20,7 +22,7 @@ public class Utilisateur {
     @Column(name = "Email", nullable = false, unique = true, length = 255)
     private String email;
 
-    @Column(name = "MotDePasse", nullable = false, columnDefinition = "CHAR(64)")
+    @Column(name = "MotDePasse", nullable = false, length = 60)
     private String motDePasse;
 
     @ManyToOne
@@ -29,6 +31,12 @@ public class Utilisateur {
             foreignKeyDefinition = "FOREIGN KEY (AdresseId) REFERENCES Adresse(Id) ON DELETE RESTRICT ON UPDATE CASCADE"
         ))
     private Adresse adresse;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "utilisateur_roles", joinColumns = @JoinColumn(name = "utilisateur_id"))
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles = new HashSet<>();
 
     public Utilisateur() {}
 
@@ -49,4 +57,7 @@ public class Utilisateur {
 
     public Adresse getAdresse() { return adresse; }
     public void setAdresse(Adresse adresse) { this.adresse = adresse; }
+
+    public Set<Role> getRoles() { return roles; }
+    public void setRoles(Set<Role> roles) { this.roles = roles; }
 }
