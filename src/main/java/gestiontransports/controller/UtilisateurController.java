@@ -27,19 +27,19 @@ public class UtilisateurController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UtilisateurDTO> findById(@PathVariable Integer id) {
+    public ResponseEntity<UtilisateurDTO> findById(@PathVariable int id) {
         return ResponseEntity.ok(utilisateurService.findById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UtilisateurDTO> update(@PathVariable Integer id,
+    public ResponseEntity<UtilisateurDTO> update(@PathVariable int id,
                                                   @Valid @RequestBody ModifierUtilisateurRequestDTO request) {
         return ResponseEntity.ok(utilisateurService.update(id, request));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRATEUR')")
-    public ResponseEntity<Void> deleteById(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteById(@PathVariable int id) {
         utilisateurService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

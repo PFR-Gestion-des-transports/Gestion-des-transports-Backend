@@ -28,7 +28,7 @@ public class VehiculeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VehiculeDTO> findById(@PathVariable Integer id) {
+    public ResponseEntity<VehiculeDTO> findById(@PathVariable int id) {
         return ResponseEntity.ok(vehiculeService.findById(id));
     }
 
@@ -44,19 +44,19 @@ public class VehiculeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VehiculeDTO> update(@PathVariable Integer id,
+    public ResponseEntity<VehiculeDTO> update(@PathVariable int id,
                                                @Valid @RequestBody ModifierVehiculeRequestDTO request) {
         return ResponseEntity.ok(vehiculeService.update(id, request));
     }
 
     @PatchMapping("/{id}/statut")
-    public ResponseEntity<VehiculeDTO> modifierStatut(@PathVariable Integer id,
+    public ResponseEntity<VehiculeDTO> modifierStatut(@PathVariable int id,
                                                        @Valid @RequestBody ModifierStatutVehiculeRequestDTO request) {
         return ResponseEntity.ok(vehiculeService.modifierStatut(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable int id) {
         vehiculeService.delete(id);
         return ResponseEntity.noContent().build();
     }

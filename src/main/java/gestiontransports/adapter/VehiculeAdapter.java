@@ -16,7 +16,7 @@ public class VehiculeAdapter {
         dto.setNombreDePlace(vehicule.getNombreDePlace());
         dto.setCategorie(vehicule.getCategorie());
         dto.setMotorisation(vehicule.getMotorisation());
-        dto.setEstVehiculeService(vehicule.getEstVehiculeService());
+        dto.setEstVehiculeService(vehicule.isEstVehiculeService());
         dto.setStatutVehicule(vehicule.getStatutVehicule());
         dto.setUtilisateurId(vehicule.getUtilisateur().getId());
         return dto;

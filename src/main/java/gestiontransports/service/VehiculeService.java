@@ -9,15 +9,15 @@ import gestiontransports.enums.Motorisation;
 import gestiontransports.enums.StatutVehicule;
 import gestiontransports.model.Utilisateur;
 import gestiontransports.model.Vehicule;
-
-import java.math.BigDecimal;
-import java.util.List;
 import gestiontransports.repository.UtilisateurRepository;
 import gestiontransports.repository.VehiculeRepository;
 import gestiontransports.security.SecurityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @Service
 public class VehiculeService {
@@ -31,6 +31,7 @@ public class VehiculeService {
         this.utilisateurRepository = utilisateurRepository;
     }
 
+    @Transactional
     public VehiculeDTO create(CreerVehiculeRequestDTO request, boolean estVehiculeService) {
         Utilisateur utilisateur = utilisateurRepository.findByEmail(SecurityUtils.currentEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
@@ -44,7 +45,7 @@ public class VehiculeService {
         vehicule.setMarque(request.getMarque());
         vehicule.setModele(request.getModele());
         vehicule.setUrlPhoto(request.getUrlPhoto());
-        vehicule.setCo2Km(request.getMotorisation() == Motorisation.ELECTRIQUE ? BigDecimal.ZERO : request.getCo2Km());
+        vehicule.setCo2Km(request.getMotorisation() == Motorisation.ELECTRIQUE ? 0.0 : request.getCo2Km());
         vehicule.setNombreDePlace(request.getNombreDePlace());
         vehicule.setCategorie(request.getCategorie());
         vehicule.setMotorisation(request.getMotorisation());
@@ -66,7 +67,7 @@ public class VehiculeService {
                 .toList();
     }
 
-    public VehiculeDTO findById(Integer id) {
+    public VehiculeDTO findById(int id) {
         Vehicule vehicule = vehiculeRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
 
@@ -77,7 +78,8 @@ public class VehiculeService {
         return VehiculeAdapter.toDTO(vehicule);
     }
 
-    public VehiculeDTO update(Integer id, ModifierVehiculeRequestDTO request) {
+    @Transactional
+    public VehiculeDTO update(int id, ModifierVehiculeRequestDTO request) {
         Vehicule vehicule = vehiculeRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
 
@@ -93,7 +95,7 @@ public class VehiculeService {
         vehicule.setMarque(request.getMarque());
         vehicule.setModele(request.getModele());
         vehicule.setUrlPhoto(request.getUrlPhoto());
-        vehicule.setCo2Km(request.getMotorisation() == Motorisation.ELECTRIQUE ? BigDecimal.ZERO : request.getCo2Km());
+        vehicule.setCo2Km(request.getMotorisation() == Motorisation.ELECTRIQUE ? 0.0 : request.getCo2Km());
         vehicule.setNombreDePlace(request.getNombreDePlace());
         vehicule.setCategorie(request.getCategorie());
         vehicule.setMotorisation(request.getMotorisation());
@@ -103,7 +105,7 @@ public class VehiculeService {
         return VehiculeAdapter.toDTO(vehiculeRepository.save(vehicule));
     }
 
-    public VehiculeDTO modifierStatut(Integer id, ModifierStatutVehiculeRequestDTO request) {
+    public VehiculeDTO modifierStatut(int id, ModifierStatutVehiculeRequestDTO request) {
         Vehicule vehicule = vehiculeRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
 
@@ -116,7 +118,7 @@ public class VehiculeService {
         return VehiculeAdapter.toDTO(vehiculeRepository.save(vehicule));
     }
 
-    public void delete(Integer id) {
+    public void delete(int id) {
         Vehicule vehicule = vehiculeRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
 
@@ -124,6 +126,6 @@ public class VehiculeService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès interdit");
         }
 
-        vehiculeRepository.deleteById(id);
+        vehiculeRepository.delete(vehicule);
     }
 }
