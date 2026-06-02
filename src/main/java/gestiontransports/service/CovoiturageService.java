@@ -2,6 +2,7 @@ package gestiontransports.service;
 
 import gestiontransports.adapter.CovoiturageAdapter;
 import gestiontransports.dto.covoiturage.CovoiturageDTO;
+import gestiontransports.dto.covoiturage.CreerCovoiturageRequest;   
 import gestiontransports.dto.covoiturage.ModifierCovoiturageDTO;
 import gestiontransports.model.Adresse;
 import gestiontransports.model.Covoiturage;
@@ -37,7 +38,7 @@ public class CovoiturageService {
     return CovoiturageAdapter.toDTO(covoiturage);
     }
 
-    public CovoiturageDTO create(CovoiturageDTO request) {
+    public CovoiturageDTO create(CreerCovoiturageRequest request) {
     Covoiturage covoiturage = CovoiturageAdapter.toModel(request);
 
     Adresse depart = adresseRepository

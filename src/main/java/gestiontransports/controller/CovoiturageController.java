@@ -1,6 +1,7 @@
 package gestiontransports.controller;
 
 import gestiontransports.dto.covoiturage.CovoiturageDTO;
+import gestiontransports.dto.covoiturage.CreerCovoiturageRequest;
 import gestiontransports.dto.covoiturage.ModifierCovoiturageDTO;
 import gestiontransports.service.CovoiturageService;
 import jakarta.validation.Valid;
@@ -31,7 +32,7 @@ public class CovoiturageController {
     }
 
     @PostMapping
-    public ResponseEntity<CovoiturageDTO> create(@Valid @RequestBody CovoiturageDTO request) {
+    public ResponseEntity<CovoiturageDTO> create(@Valid @RequestBody CreerCovoiturageRequest request) {
         return ResponseEntity.status(201).body(covoiturageService.create(request));
     }
 

@@ -6,9 +6,7 @@ import gestiontransports.dto.covoiturage.CovoiturageDTO;
 public class CovoiturageAdapter {
     public static CovoiturageDTO toDTO(Covoiturage covoiturage) {
         CovoiturageDTO dto = new CovoiturageDTO();
-        dto.setId(covoiturage.getId());
         dto.setNbrPlaceInitial(covoiturage.getNbrPlaceInitial());
-        dto.setNbrPlaceRestante(covoiturage.getNbrPlaceRestante());
         dto.setDateHeureDebut(covoiturage.getDateHeureDebut());
         dto.setAdresseDepart(AdresseAdapter.toDTO(covoiturage.getAdresseDepart()));
         dto.setAdresseArrivee(AdresseAdapter.toDTO(covoiturage.getAdresseArrivee()));
@@ -17,9 +15,7 @@ public class CovoiturageAdapter {
 
     public static Covoiturage toModel(CovoiturageDTO dto) {
         Covoiturage covoiturage = new Covoiturage();
-        covoiturage.setId(dto.getId());
         covoiturage.setNbrPlaceInitial(dto.getNbrPlaceInitial());
-        covoiturage.setNbrPlaceRestante(dto.getNbrPlaceRestante());
         covoiturage.setDateHeureDebut(dto.getDateHeureDebut());
         covoiturage.setAdresseDepart(AdresseAdapter.toModel(dto.getAdresseDepart()));
         covoiturage.setAdresseArrivee(AdresseAdapter.toModel(dto.getAdresseArrivee()));

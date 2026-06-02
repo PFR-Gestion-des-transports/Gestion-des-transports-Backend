@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 
 public class AdresseDTO {
 
+    private Long id;
+
     @NotBlank
     private String ville;
 
@@ -12,6 +14,9 @@ public class AdresseDTO {
 
     @NotBlank
     private String numeroRue;
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getVille() { return ville; }
     public void setVille(String ville) { this.ville = ville; }
