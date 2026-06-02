@@ -31,7 +31,7 @@ public class Vehicule {
     private BigDecimal co2Km;
 
     @Column(name = "NombreDePlace", nullable = false)
-    private Integer nombreDePlace;
+    private int nombreDePlace;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Categorie", nullable = false, length = 50)
@@ -42,7 +42,7 @@ public class Vehicule {
     private Motorisation motorisation;
 
     @Column(name = "EstVehiculeService", nullable = false)
-    private Boolean estVehiculeService = false;
+    private boolean estVehiculeService;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "StatutVehicule", nullable = false, length = 20)
@@ -75,8 +75,8 @@ public class Vehicule {
     public BigDecimal getCo2Km() { return co2Km; }
     public void setCo2Km(BigDecimal co2Km) { this.co2Km = co2Km; }
 
-    public Integer getNombreDePlace() { return nombreDePlace; }
-    public void setNombreDePlace(Integer nombreDePlace) { this.nombreDePlace = nombreDePlace; }
+    public int getNombreDePlace() { return nombreDePlace; }
+    public void setNombreDePlace(int nombreDePlace) { this.nombreDePlace = nombreDePlace; }
 
     public Categorie getCategorie() { return categorie; }
     public void setCategorie(Categorie categorie) { this.categorie = categorie; }
@@ -84,8 +84,8 @@ public class Vehicule {
     public Motorisation getMotorisation() { return motorisation; }
     public void setMotorisation(Motorisation motorisation) { this.motorisation = motorisation; }
 
-    public Boolean getEstVehiculeService() { return estVehiculeService; }
-    public void setEstVehiculeService(Boolean estVehiculeService) { this.estVehiculeService = estVehiculeService; }
+    public boolean isEstVehiculeService() { return estVehiculeService; }
+    public void setEstVehiculeService(boolean estVehiculeService) { this.estVehiculeService = estVehiculeService; }
 
     public StatutVehicule getStatutVehicule() { return statutVehicule; }
     public void setStatutVehicule(StatutVehicule statutVehicule) { this.statutVehicule = statutVehicule; }
