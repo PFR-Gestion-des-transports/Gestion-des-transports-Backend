@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -57,8 +56,7 @@ class AuthControllerTest {
                 "motDePasse", "password123",
                 "ville", "Paris",
                 "rue", "Rue de la Paix",
-                "numeroRue", "1",
-                "roles", List.of("COLLABORATEUR")
+                "numeroRue", "1"
         );
 
         mockMvc.perform(post("/auth/creer-compte")
@@ -78,8 +76,7 @@ class AuthControllerTest {
                 "motDePasse", "password123",
                 "ville", "Paris",
                 "rue", "Rue de la Paix",
-                "numeroRue", "1",
-                "roles", List.of("COLLABORATEUR")
+                "numeroRue", "1"
         );
 
         mockMvc.perform(post("/auth/creer-compte")
