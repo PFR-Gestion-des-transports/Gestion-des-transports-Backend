@@ -14,7 +14,7 @@ import jakarta.persistence.ForeignKey;
 public class ReservationCovoiturage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "covoiturage", nullable = false,
@@ -30,5 +30,15 @@ public class ReservationCovoiturage {
         ))
         private Utilisateur utilisateur;
 
+    public ReservationCovoiturage() {}
+
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+
+    public Covoiturage getCovoiturage() { return covoiturage; }
+    public void setCovoiturage(Covoiturage covoiturage) { this.covoiturage = covoiturage; }
+
+    public Utilisateur getUtilisateur() { return utilisateur; }
+    public void setUtilisateur(Utilisateur utilisateur) { this.utilisateur = utilisateur; }
 
 }

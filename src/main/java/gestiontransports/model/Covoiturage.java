@@ -13,6 +13,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.CascadeType;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Covoiturage")
@@ -20,16 +21,16 @@ public class Covoiturage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "nbrPlaceInitial", nullable = false, length = 100)
-    private String nbrPlaceInitial;
+    private Integer nbrPlaceInitial;
 
     @Column(name = "nbrPlaceRestante", nullable = false, length = 150)
-    private String nbrPlaceRestante;
+    private Integer nbrPlaceRestante;
 
     @Column(name = "dateHeureDebut", nullable = false, length = 10)
-    private String dateHeureDebut;
+    private LocalDateTime dateHeureDebut;
 
     @ManyToOne
     @JoinColumn(name = "AdresseIdDepart", nullable = false,
@@ -47,8 +48,31 @@ public class Covoiturage {
 
     @OneToMany(mappedBy = "covoiturage", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ReservationCovoiturage> reservations = new HashSet<>();
-    
 
-    
+
+    public Covoiturage() {}
+
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+
+    public Integer getNbrPlaceInitial() { return nbrPlaceInitial; }
+    public void setNbrPlaceInitial(Integer nbrPlaceInitial) { this.nbrPlaceInitial = nbrPlaceInitial; }
+
+    public Integer getNbrPlaceRestante() { return nbrPlaceRestante; }
+    public void setNbrPlaceRestante(Integer nbrPlaceRestante) { this.nbrPlaceRestante = nbrPlaceRestante; }
+
+    public LocalDateTime getDateHeureDebut() { return dateHeureDebut; }
+    public void setDateHeureDebut(LocalDateTime dateHeureDebut) { this.dateHeureDebut = dateHeureDebut; }
+
+    public Adresse getAdresseDepart() { return adresseDepart; }
+    public void setAdresseDepart(Adresse adresseDepart) { this.adresseDepart = adresseDepart; }
+
+    public Adresse getAdresseArrivee() { return adresseArrivee; }
+    public void setAdresseArrivee(Adresse adresseArrivee) { this.adresseArrivee = adresseArrivee; }
+
+    public Set<ReservationCovoiturage> getReservations() { return reservations; }
+    public void setReservations(Set<ReservationCovoiturage> reservations) { this.reservations = reservations; } 
+
+
 
 }
