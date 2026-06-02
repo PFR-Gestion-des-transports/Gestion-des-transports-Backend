@@ -10,6 +10,7 @@ import gestiontransports.repository.UtilisateurRepository;
 import gestiontransports.security.SecurityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -44,6 +45,7 @@ public class UtilisateurService {
         return UtilisateurAdapter.toDTO(utilisateur);
     }
 
+    @Transactional
     public UtilisateurDTO update(int id, ModifierUtilisateurRequestDTO request) {
         Utilisateur utilisateur = utilisateurRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
@@ -78,6 +80,4 @@ public class UtilisateurService {
         }
         utilisateurRepository.deleteById(id);
     }
-
-
 }

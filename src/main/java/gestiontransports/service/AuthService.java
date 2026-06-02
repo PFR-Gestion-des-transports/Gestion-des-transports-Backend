@@ -3,6 +3,7 @@ package gestiontransports.service;
 import gestiontransports.dto.securite.ConnexionRequestDTO;
 import gestiontransports.dto.securite.ConnexionResponseDTO;
 import gestiontransports.dto.securite.CreerCompteRequestDTO;
+import gestiontransports.enums.Role;
 import gestiontransports.model.Adresse;
 import gestiontransports.model.Utilisateur;
 import gestiontransports.repository.AdresseRepository;
@@ -11,7 +12,10 @@ import gestiontransports.security.JwtUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Set;
 
 @Service
 public class AuthService {
@@ -31,6 +35,7 @@ public class AuthService {
         this.jwtUtil = jwtUtil;
     }
 
+    @Transactional
     public ConnexionResponseDTO creerCompte(CreerCompteRequestDTO request) {
         if (utilisateurRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email déjà utilisé");
@@ -52,7 +57,7 @@ public class AuthService {
         utilisateur.setEmail(request.getEmail());
         utilisateur.setMotDePasse(passwordEncoder.encode(request.getMotDePasse()));
         utilisateur.setAdresse(adresse);
-        utilisateur.setRoles(request.getRoles());
+        utilisateur.setRoles(Set.of(Role.COLLABORATEUR));
 
         utilisateurRepository.save(utilisateur);
 

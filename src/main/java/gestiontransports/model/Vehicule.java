@@ -4,7 +4,6 @@ import gestiontransports.enums.Categorie;
 import gestiontransports.enums.Motorisation;
 import gestiontransports.enums.StatutVehicule;
 import jakarta.persistence.*;
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "Vehicule")
@@ -27,11 +26,11 @@ public class Vehicule {
     @Column(name = "UrlPhoto", nullable = false, length = 500)
     private String urlPhoto;
 
-    @Column(name = "CO2KM", nullable = false, precision = 10, scale = 2)
-    private BigDecimal co2Km;
+    @Column(name = "CO2KM", nullable = false)
+    private double co2Km;
 
     @Column(name = "NombreDePlace", nullable = false)
-    private Integer nombreDePlace;
+    private int nombreDePlace;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Categorie", nullable = false, length = 50)
@@ -42,7 +41,7 @@ public class Vehicule {
     private Motorisation motorisation;
 
     @Column(name = "EstVehiculeService", nullable = false)
-    private Boolean estVehiculeService = false;
+    private boolean estVehiculeService;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "StatutVehicule", nullable = false, length = 20)
@@ -72,11 +71,11 @@ public class Vehicule {
     public String getUrlPhoto() { return urlPhoto; }
     public void setUrlPhoto(String urlPhoto) { this.urlPhoto = urlPhoto; }
 
-    public BigDecimal getCo2Km() { return co2Km; }
-    public void setCo2Km(BigDecimal co2Km) { this.co2Km = co2Km; }
+    public double getCo2Km() { return co2Km; }
+    public void setCo2Km(double co2Km) { this.co2Km = co2Km; }
 
-    public Integer getNombreDePlace() { return nombreDePlace; }
-    public void setNombreDePlace(Integer nombreDePlace) { this.nombreDePlace = nombreDePlace; }
+    public int getNombreDePlace() { return nombreDePlace; }
+    public void setNombreDePlace(int nombreDePlace) { this.nombreDePlace = nombreDePlace; }
 
     public Categorie getCategorie() { return categorie; }
     public void setCategorie(Categorie categorie) { this.categorie = categorie; }
@@ -84,8 +83,8 @@ public class Vehicule {
     public Motorisation getMotorisation() { return motorisation; }
     public void setMotorisation(Motorisation motorisation) { this.motorisation = motorisation; }
 
-    public Boolean getEstVehiculeService() { return estVehiculeService; }
-    public void setEstVehiculeService(Boolean estVehiculeService) { this.estVehiculeService = estVehiculeService; }
+    public boolean isEstVehiculeService() { return estVehiculeService; }
+    public void setEstVehiculeService(boolean estVehiculeService) { this.estVehiculeService = estVehiculeService; }
 
     public StatutVehicule getStatutVehicule() { return statutVehicule; }
     public void setStatutVehicule(StatutVehicule statutVehicule) { this.statutVehicule = statutVehicule; }

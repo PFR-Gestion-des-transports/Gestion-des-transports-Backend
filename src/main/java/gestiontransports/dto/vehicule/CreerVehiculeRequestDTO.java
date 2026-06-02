@@ -6,8 +6,8 @@ import gestiontransports.enums.StatutVehicule;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
-import java.math.BigDecimal;
 
 public class CreerVehiculeRequestDTO {
 
@@ -23,8 +23,8 @@ public class CreerVehiculeRequestDTO {
     @NotBlank
     private String urlPhoto;
 
-    @NotNull
-    private BigDecimal co2Km;
+    @PositiveOrZero
+    private double co2Km;
 
     @NotNull
     @Min(2)
@@ -51,8 +51,8 @@ public class CreerVehiculeRequestDTO {
     public String getUrlPhoto() { return urlPhoto; }
     public void setUrlPhoto(String urlPhoto) { this.urlPhoto = urlPhoto; }
 
-    public BigDecimal getCo2Km() { return co2Km; }
-    public void setCo2Km(BigDecimal co2Km) { this.co2Km = co2Km; }
+    public double getCo2Km() { return co2Km; }
+    public void setCo2Km(double co2Km) { this.co2Km = co2Km; }
 
     public Integer getNombreDePlace() { return nombreDePlace; }
     public void setNombreDePlace(Integer nombreDePlace) { this.nombreDePlace = nombreDePlace; }
