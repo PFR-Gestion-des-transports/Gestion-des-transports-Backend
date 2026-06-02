@@ -12,8 +12,6 @@ import java.util.Set;
 
 public class UtilisateurDTO {
 
-    private Integer id;
-
     @NotBlank
     private String prenom;
 
@@ -30,9 +28,6 @@ public class UtilisateurDTO {
 
     @NotEmpty
     private Set<Role> roles;
-
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
 
     public String getPrenom() { return prenom; }
     public void setPrenom(String prenom) { this.prenom = prenom; }

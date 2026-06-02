@@ -12,13 +12,8 @@ import jakarta.validation.constraints.NotEmpty;
 
 public class CovoiturageDTO {
 
-    private Integer id;
-
     @NotNull
     private Integer nbrPlaceInitial;
-
-    @NotNull
-    private Integer nbrPlaceRestante;
 
     @NotNull
     private LocalDateTime dateHeureDebut;
@@ -31,17 +26,8 @@ public class CovoiturageDTO {
     @Valid
     private AdresseDTO adresseArrivee;
 
-    @NotEmpty
-    private Set<ReservationCovoiturageDTO> reservations;
-
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
-
     public Integer getNbrPlaceInitial() { return nbrPlaceInitial; }
     public void setNbrPlaceInitial(Integer nbrPlaceInitial) { this.nbrPlaceInitial = nbrPlaceInitial; }
-
-    public Integer getNbrPlaceRestante() { return nbrPlaceRestante; }
-    public void setNbrPlaceRestante(Integer nbrPlaceRestante) { this.nbrPlaceRestante = nbrPlaceRestante; }
 
     public LocalDateTime getDateHeureDebut() { return dateHeureDebut; }
     public void setDateHeureDebut(LocalDateTime dateHeureDebut) { this.dateHeureDebut = dateHeureDebut; }
@@ -51,7 +37,4 @@ public class CovoiturageDTO {
 
     public AdresseDTO getAdresseArrivee() { return adresseArrivee; }
     public void setAdresseArrivee(AdresseDTO adresseArrivee) { this.adresseArrivee = adresseArrivee; }
-
-    public Set<ReservationCovoiturageDTO> getReservations() { return reservations; }
-    public void setReservations(Set<ReservationCovoiturageDTO> reservations) { this.reservations = reservations; }
 }
