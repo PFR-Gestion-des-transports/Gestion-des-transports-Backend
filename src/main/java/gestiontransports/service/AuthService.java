@@ -1,8 +1,8 @@
 package gestiontransports.service;
 
-import gestiontransports.dto.ConnexionRequest;
-import gestiontransports.dto.ConnexionResponse;
-import gestiontransports.dto.CreerCompteRequest;
+import gestiontransports.dto.securite.ConnexionRequestDTO;
+import gestiontransports.dto.securite.ConnexionResponseDTO;
+import gestiontransports.dto.securite.CreerCompteRequestDTO;
 import gestiontransports.model.Adresse;
 import gestiontransports.model.Utilisateur;
 import gestiontransports.repository.AdresseRepository;
@@ -31,7 +31,7 @@ public class AuthService {
         this.jwtUtil = jwtUtil;
     }
 
-    public ConnexionResponse creerCompte(CreerCompteRequest request) {
+    public ConnexionResponseDTO creerCompte(CreerCompteRequestDTO request) {
         if (utilisateurRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email déjà utilisé");
         }
@@ -60,10 +60,10 @@ public class AuthService {
                 utilisateur.getEmail(),
                 utilisateur.getRoles().stream().map(Enum::name).toList()
         );
-        return new ConnexionResponse(token);
+        return new ConnexionResponseDTO(token);
     }
 
-    public ConnexionResponse seConnecter(ConnexionRequest request) {
+    public ConnexionResponseDTO seConnecter(ConnexionRequestDTO request) {
         Utilisateur utilisateur = utilisateurRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Identifiants invalides"));
 
@@ -75,6 +75,6 @@ public class AuthService {
                 utilisateur.getEmail(),
                 utilisateur.getRoles().stream().map(Enum::name).toList()
         );
-        return new ConnexionResponse(token);
+        return new ConnexionResponseDTO(token);
     }
 }

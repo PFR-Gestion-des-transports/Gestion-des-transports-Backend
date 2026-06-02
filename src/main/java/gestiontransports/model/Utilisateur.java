@@ -1,5 +1,6 @@
 package gestiontransports.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,6 +23,7 @@ public class Utilisateur {
     @Column(name = "Email", nullable = false, unique = true, length = 255)
     private String email;
 
+    @JsonIgnore
     @Column(name = "MotDePasse", nullable = false, length = 60)
     private String motDePasse;
 

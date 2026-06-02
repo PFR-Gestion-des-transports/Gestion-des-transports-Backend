@@ -1,8 +1,8 @@
 package gestiontransports.controller;
 
-import gestiontransports.dto.ConnexionRequest;
-import gestiontransports.dto.ConnexionResponse;
-import gestiontransports.dto.CreerCompteRequest;
+import gestiontransports.dto.securite.ConnexionRequestDTO;
+import gestiontransports.dto.securite.ConnexionResponseDTO;
+import gestiontransports.dto.securite.CreerCompteRequestDTO;
 import gestiontransports.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,12 +22,12 @@ public class AuthController {
     }
 
     @PostMapping("/creer-compte")
-    public ResponseEntity<ConnexionResponse> creerCompte(@Valid @RequestBody CreerCompteRequest request) {
+    public ResponseEntity<ConnexionResponseDTO> creerCompte(@Valid @RequestBody CreerCompteRequestDTO request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.creerCompte(request));
     }
 
     @PostMapping("/se-connecter")
-    public ResponseEntity<ConnexionResponse> seConnecter(@Valid @RequestBody ConnexionRequest request) {
+    public ResponseEntity<ConnexionResponseDTO> seConnecter(@Valid @RequestBody ConnexionRequestDTO request) {
         return ResponseEntity.ok(authService.seConnecter(request));
     }
 
