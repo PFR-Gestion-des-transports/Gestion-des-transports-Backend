@@ -33,21 +33,28 @@ public class Covoiturage {
     private LocalDateTime dateHeureDebut;
 
     @ManyToOne
-    @JoinColumn(name = "AdresseIdDepart", nullable = false,
+    @JoinColumn(name = "adresseDepart", nullable = false,
         foreignKey = @ForeignKey(
-            foreignKeyDefinition = "FOREIGN KEY (AdresseIdDepart) REFERENCES Adresse(Id) ON DELETE RESTRICT ON UPDATE CASCADE"
+            foreignKeyDefinition = "FOREIGN KEY (adresseDepart) REFERENCES Adresse(Id) ON DELETE RESTRICT ON UPDATE CASCADE"
         ))
     private Adresse adresseDepart;
 
     @ManyToOne
-    @JoinColumn(name = "AdresseIdArrivee", nullable = false,
+    @JoinColumn(name = "adresseArrivee", nullable = false,
         foreignKey = @ForeignKey(
-            foreignKeyDefinition = "FOREIGN KEY (AdresseIdArrivee) REFERENCES Adresse(Id) ON DELETE RESTRICT ON UPDATE CASCADE"
+            foreignKeyDefinition = "FOREIGN KEY (adresseArrivee) REFERENCES Adresse(Id) ON DELETE RESTRICT ON UPDATE CASCADE"
         ))
     private Adresse adresseArrivee;
 
     @OneToMany(mappedBy = "covoiturage", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ReservationCovoiturage> reservations = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "utilisateur", nullable = false,
+        foreignKey = @ForeignKey(
+            foreignKeyDefinition = "FOREIGN KEY (utilisateur) REFERENCES Utilisateur(Id) ON DELETE RESTRICT ON UPDATE CASCADE"
+        ))
+    private Utilisateur utilisateur;
 
 
     public Covoiturage() {}

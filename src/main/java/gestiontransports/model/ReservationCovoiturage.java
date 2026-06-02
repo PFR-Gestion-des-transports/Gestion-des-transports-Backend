@@ -24,9 +24,9 @@ public class ReservationCovoiturage {
         private Covoiturage covoiturage;
     
     @ManyToOne
-    @JoinColumn(name = "utilisateur_id", nullable = false,
+    @JoinColumn(name = "utilisateur", nullable = false,
         foreignKey = @ForeignKey(
-            foreignKeyDefinition = "FOREIGN KEY (utilisateur_id) REFERENCES Utilisateur(id) ON DELETE RESTRICT ON UPDATE CASCADE"
+            foreignKeyDefinition = "FOREIGN KEY (utilisateur) REFERENCES Utilisateur(id) ON DELETE RESTRICT ON UPDATE CASCADE"
         ))
         private Utilisateur utilisateur;
 

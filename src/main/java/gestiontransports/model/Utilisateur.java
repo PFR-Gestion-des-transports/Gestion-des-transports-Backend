@@ -34,8 +34,11 @@ public class Utilisateur {
         ))
     private Adresse adresse;
 
-    @OneToMany(mappedBy = "utilisateur_id", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ReservationCovoiturage> reservations = new HashSet<>();
+
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Covoiturage> covoiturages = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "utilisateur_roles", joinColumns = @JoinColumn(name = "utilisateur_id"))

@@ -9,11 +9,8 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Set;
 import jakarta.validation.constraints.NotEmpty;
 
-
-public class CovoiturageDTO {
-
-    private Integer id;
-
+public class ModifierCovoiturageDTO {
+    
     @NotNull
     private Integer nbrPlaceInitial;
 
@@ -33,9 +30,6 @@ public class CovoiturageDTO {
 
     @NotEmpty
     private Set<ReservationCovoiturageDTO> reservations;
-
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
 
     public Integer getNbrPlaceInitial() { return nbrPlaceInitial; }
     public void setNbrPlaceInitial(Integer nbrPlaceInitial) { this.nbrPlaceInitial = nbrPlaceInitial; }
