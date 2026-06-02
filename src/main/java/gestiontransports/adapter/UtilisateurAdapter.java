@@ -1,6 +1,5 @@
 package gestiontransports.adapter;
 
-import gestiontransports.dto.adresse.AdresseDTO;
 import gestiontransports.dto.utilisateur.UtilisateurDTO;
 import gestiontransports.model.Adresse;
 import gestiontransports.model.Utilisateur;
