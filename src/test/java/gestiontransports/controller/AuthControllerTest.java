@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -61,8 +62,8 @@ class AuthControllerTest {
         );
 
         mockMvc.perform(post("/auth/creer-compte")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                        .content(Objects.requireNonNull(objectMapper.writeValueAsString(request))))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.token").isNotEmpty());
     }
@@ -82,8 +83,8 @@ class AuthControllerTest {
         );
 
         mockMvc.perform(post("/auth/creer-compte")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                        .content(Objects.requireNonNull(objectMapper.writeValueAsString(request))))
                 .andExpect(status().isConflict());
     }
 
@@ -96,8 +97,8 @@ class AuthControllerTest {
         );
 
         mockMvc.perform(post("/auth/se-connecter")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                        .content(Objects.requireNonNull(objectMapper.writeValueAsString(request))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").isNotEmpty());
     }
@@ -111,8 +112,8 @@ class AuthControllerTest {
         );
 
         mockMvc.perform(post("/auth/se-connecter")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                        .content(Objects.requireNonNull(objectMapper.writeValueAsString(request))))
                 .andExpect(status().isUnauthorized());
     }
 }

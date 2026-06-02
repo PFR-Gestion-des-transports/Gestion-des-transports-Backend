@@ -33,7 +33,7 @@ public class UtilisateurService {
                 .toList();
     }
 
-    public UtilisateurDTO findById(Integer id) {
+    public UtilisateurDTO findById(int id) {
         Utilisateur utilisateur = utilisateurRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
 
@@ -44,7 +44,7 @@ public class UtilisateurService {
         return UtilisateurAdapter.toDTO(utilisateur);
     }
 
-    public UtilisateurDTO update(Integer id, ModifierUtilisateurRequestDTO request) {
+    public UtilisateurDTO update(int id, ModifierUtilisateurRequestDTO request) {
         Utilisateur utilisateur = utilisateurRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
 
@@ -72,7 +72,7 @@ public class UtilisateurService {
         return UtilisateurAdapter.toDTO(utilisateurRepository.save(utilisateur));
     }
 
-    public void deleteById(Integer id) {
+    public void deleteById(int id) {
         if (!utilisateurRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable");
         }
