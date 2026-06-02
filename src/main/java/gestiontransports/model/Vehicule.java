@@ -4,7 +4,6 @@ import gestiontransports.enums.Categorie;
 import gestiontransports.enums.Motorisation;
 import gestiontransports.enums.StatutVehicule;
 import jakarta.persistence.*;
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "Vehicule")
@@ -27,8 +26,8 @@ public class Vehicule {
     @Column(name = "UrlPhoto", nullable = false, length = 500)
     private String urlPhoto;
 
-    @Column(name = "CO2KM", nullable = false, precision = 10, scale = 2)
-    private BigDecimal co2Km;
+    @Column(name = "CO2KM", nullable = false)
+    private double co2Km;
 
     @Column(name = "NombreDePlace", nullable = false)
     private int nombreDePlace;
@@ -72,8 +71,8 @@ public class Vehicule {
     public String getUrlPhoto() { return urlPhoto; }
     public void setUrlPhoto(String urlPhoto) { this.urlPhoto = urlPhoto; }
 
-    public BigDecimal getCo2Km() { return co2Km; }
-    public void setCo2Km(BigDecimal co2Km) { this.co2Km = co2Km; }
+    public double getCo2Km() { return co2Km; }
+    public void setCo2Km(double co2Km) { this.co2Km = co2Km; }
 
     public int getNombreDePlace() { return nombreDePlace; }
     public void setNombreDePlace(int nombreDePlace) { this.nombreDePlace = nombreDePlace; }

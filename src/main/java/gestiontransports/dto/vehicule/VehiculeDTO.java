@@ -4,8 +4,6 @@ import gestiontransports.enums.Categorie;
 import gestiontransports.enums.Motorisation;
 import gestiontransports.enums.StatutVehicule;
 
-import java.math.BigDecimal;
-
 public class VehiculeDTO {
 
     private Integer id;
@@ -13,7 +11,7 @@ public class VehiculeDTO {
     private String marque;
     private String modele;
     private String urlPhoto;
-    private BigDecimal co2Km;
+    private double co2Km;
     private Integer nombreDePlace;
     private Categorie categorie;
     private Motorisation motorisation;
@@ -36,8 +34,8 @@ public class VehiculeDTO {
     public String getUrlPhoto() { return urlPhoto; }
     public void setUrlPhoto(String urlPhoto) { this.urlPhoto = urlPhoto; }
 
-    public BigDecimal getCo2Km() { return co2Km; }
-    public void setCo2Km(BigDecimal co2Km) { this.co2Km = co2Km; }
+    public double getCo2Km() { return co2Km; }
+    public void setCo2Km(double co2Km) { this.co2Km = co2Km; }
 
     public Integer getNombreDePlace() { return nombreDePlace; }
     public void setNombreDePlace(Integer nombreDePlace) { this.nombreDePlace = nombreDePlace; }

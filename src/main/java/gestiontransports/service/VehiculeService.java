@@ -10,7 +10,6 @@ import gestiontransports.enums.StatutVehicule;
 import gestiontransports.model.Utilisateur;
 import gestiontransports.model.Vehicule;
 
-import java.math.BigDecimal;
 import java.util.List;
 import gestiontransports.repository.UtilisateurRepository;
 import gestiontransports.repository.VehiculeRepository;
@@ -44,7 +43,7 @@ public class VehiculeService {
         vehicule.setMarque(request.getMarque());
         vehicule.setModele(request.getModele());
         vehicule.setUrlPhoto(request.getUrlPhoto());
-        vehicule.setCo2Km(request.getMotorisation() == Motorisation.ELECTRIQUE ? BigDecimal.ZERO : request.getCo2Km());
+        vehicule.setCo2Km(request.getMotorisation() == Motorisation.ELECTRIQUE ? 0.0 : request.getCo2Km());
         vehicule.setNombreDePlace(request.getNombreDePlace());
         vehicule.setCategorie(request.getCategorie());
         vehicule.setMotorisation(request.getMotorisation());
@@ -93,7 +92,7 @@ public class VehiculeService {
         vehicule.setMarque(request.getMarque());
         vehicule.setModele(request.getModele());
         vehicule.setUrlPhoto(request.getUrlPhoto());
-        vehicule.setCo2Km(request.getMotorisation() == Motorisation.ELECTRIQUE ? BigDecimal.ZERO : request.getCo2Km());
+        vehicule.setCo2Km(request.getMotorisation() == Motorisation.ELECTRIQUE ? 0.0 : request.getCo2Km());
         vehicule.setNombreDePlace(request.getNombreDePlace());
         vehicule.setCategorie(request.getCategorie());
         vehicule.setMotorisation(request.getMotorisation());
