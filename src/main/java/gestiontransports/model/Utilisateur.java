@@ -1,8 +1,11 @@
 package gestiontransports.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import gestiontransports.enums.Role;
 import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -34,6 +37,9 @@ public class Utilisateur {
         ))
     private Adresse adresse;
 
+    @OneToMany(mappedBy = "utilisateur")
+    private List<Vehicule> vehicules = new ArrayList<>();
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "utilisateur_roles", joinColumns = @JoinColumn(name = "utilisateur_id"))
     @Column(name = "role")
@@ -62,4 +68,7 @@ public class Utilisateur {
 
     public Set<Role> getRoles() { return roles; }
     public void setRoles(Set<Role> roles) { this.roles = roles; }
+
+    public List<Vehicule> getVehicules() { return vehicules; }
+    public void setVehicules(List<Vehicule> vehicules) { this.vehicules = vehicules; }
 }

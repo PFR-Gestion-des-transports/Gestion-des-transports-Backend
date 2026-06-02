@@ -1,7 +1,7 @@
 package gestiontransports.dto.utilisateur;
 
 import gestiontransports.dto.adresse.AdresseDTO;
-import gestiontransports.model.Role;
+import gestiontransports.enums.Role;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
