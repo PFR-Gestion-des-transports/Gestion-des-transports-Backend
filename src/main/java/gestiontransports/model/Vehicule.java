@@ -49,10 +49,7 @@ public class Vehicule {
     private StatutVehicule statutVehicule;
 
     @ManyToOne
-    @JoinColumn(name = "UtilisateurId", nullable = false,
-        foreignKey = @ForeignKey(
-            foreignKeyDefinition = "FOREIGN KEY (UtilisateurId) REFERENCES Utilisateur(Id) ON DELETE RESTRICT ON UPDATE CASCADE"
-        ))
+    @JoinColumn(name = "utilisateur_id", nullable = false)
     private Utilisateur utilisateur;
 
     public Vehicule() {}

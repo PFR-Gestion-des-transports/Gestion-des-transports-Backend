@@ -31,10 +31,7 @@ public class Utilisateur {
     private String motDePasse;
 
     @ManyToOne
-    @JoinColumn(name = "AdresseId", nullable = false,
-        foreignKey = @ForeignKey(
-            foreignKeyDefinition = "FOREIGN KEY (AdresseId) REFERENCES Adresse(Id) ON DELETE RESTRICT ON UPDATE CASCADE"
-        ))
+    @JoinColumn(name = "adresse_id", nullable = false)
     private Adresse adresse;
 
     @OneToMany(mappedBy = "utilisateur")
