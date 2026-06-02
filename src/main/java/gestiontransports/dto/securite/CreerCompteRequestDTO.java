@@ -1,6 +1,6 @@
 package gestiontransports.dto.securite;
 
-import gestiontransports.model.Role;
+import gestiontransports.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

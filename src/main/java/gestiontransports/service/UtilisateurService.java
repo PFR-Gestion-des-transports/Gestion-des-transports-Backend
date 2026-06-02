@@ -37,7 +37,7 @@ public class UtilisateurService {
         Utilisateur utilisateur = utilisateurRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
 
-        if (!SecurityUtils.isAdmin() && !utilisateur.getEmail().equals(SecurityUtils.currentEmail())) {
+        if (!SecurityUtils.isUserAuthorizedAdminAndSelf(utilisateur)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès interdit");
         }
 
@@ -48,7 +48,7 @@ public class UtilisateurService {
         Utilisateur utilisateur = utilisateurRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
 
-        if (!SecurityUtils.isAdmin() && !utilisateur.getEmail().equals(SecurityUtils.currentEmail())) {
+        if (!SecurityUtils.isUserAuthorizedAdminAndSelf(utilisateur)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès interdit");
         }
 
