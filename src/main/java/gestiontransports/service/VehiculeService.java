@@ -66,7 +66,7 @@ public class VehiculeService {
                 .toList();
     }
 
-    public VehiculeDTO findById(Integer id) {
+    public VehiculeDTO findById(int id) {
         Vehicule vehicule = vehiculeRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
 
@@ -77,7 +77,7 @@ public class VehiculeService {
         return VehiculeAdapter.toDTO(vehicule);
     }
 
-    public VehiculeDTO update(Integer id, ModifierVehiculeRequestDTO request) {
+    public VehiculeDTO update(int id, ModifierVehiculeRequestDTO request) {
         Vehicule vehicule = vehiculeRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
 
@@ -103,7 +103,7 @@ public class VehiculeService {
         return VehiculeAdapter.toDTO(vehiculeRepository.save(vehicule));
     }
 
-    public VehiculeDTO modifierStatut(Integer id, ModifierStatutVehiculeRequestDTO request) {
+    public VehiculeDTO modifierStatut(int id, ModifierStatutVehiculeRequestDTO request) {
         Vehicule vehicule = vehiculeRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
 
@@ -116,7 +116,7 @@ public class VehiculeService {
         return VehiculeAdapter.toDTO(vehiculeRepository.save(vehicule));
     }
 
-    public void delete(Integer id) {
+    public void delete(int id) {
         Vehicule vehicule = vehiculeRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
 
