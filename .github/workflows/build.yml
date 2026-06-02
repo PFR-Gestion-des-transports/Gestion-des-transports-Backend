@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
 
     steps:
       - name: Checkout code
@@ -41,7 +44,7 @@ jobs:
         with:
           name: test-report
           path: target/surefire-reports/
-          
+
       - name: Test Report Summary
         uses: dorny/test-reporter@v1
         if: always()
