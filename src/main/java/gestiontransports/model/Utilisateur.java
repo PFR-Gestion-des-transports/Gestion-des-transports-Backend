@@ -32,6 +32,9 @@ public class Utilisateur {
         ))
     private Adresse adresse;
 
+    @OneToMany(mappedBy = "utilisateur_id", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ReservationCovoiturage> reservations = new HashSet<>();
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "utilisateur_roles", joinColumns = @JoinColumn(name = "utilisateur_id"))
     @Column(name = "role")
