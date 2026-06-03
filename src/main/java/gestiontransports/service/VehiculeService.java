@@ -194,7 +194,8 @@ public class VehiculeService {
      *
      * @param id l'identifiant du véhicule à supprimer
      * @throws org.springframework.web.server.ResponseStatusException 404 si le véhicule est introuvable,
-     *         403 si l'appelant n'est pas autorisé à supprimer ce véhicule
+     *         403 si l'appelant n'est pas autorisé à supprimer ce véhicule,
+     *         409 si le véhicule possède des réservations actives
      */
     public void delete(int id) {
         Vehicule vehicule = vehiculeRepository.findById(id)
@@ -202,6 +203,11 @@ public class VehiculeService {
 
         if (!SecurityUtils.isUserAuthorizedAdminAndSelf(vehicule.getUtilisateur())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès interdit");
+        }
+
+        if (!reservationVehiculeService.findActivesByVehiculeId(id).isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Impossible de supprimer un véhicule ayant des réservations actives");
         }
 
         vehiculeRepository.delete(vehicule);
