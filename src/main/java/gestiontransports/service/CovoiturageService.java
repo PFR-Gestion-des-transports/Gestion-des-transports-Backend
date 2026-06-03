@@ -18,6 +18,7 @@ import gestiontransports.repository.CovoiturageRepository;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -79,6 +80,7 @@ public class CovoiturageService {
      * @return le DTO du covoiturage nouvellement créé
      * @throws org.springframework.web.server.ResponseStatusException 404 si l'utilisateur authentifié ou le véhicule est introuvable
      */
+    @Transactional
     public CovoiturageDTO create(CreerCovoiturageRequest request) {
     
         Utilisateur utilisateur = utilisateurRepository.findByEmail(SecurityUtils.currentEmail())
@@ -124,6 +126,7 @@ public class CovoiturageService {
      * @throws org.springframework.web.server.ResponseStatusException 404 si le covoiturage ou le véhicule est introuvable,
      *         403 si l'appelant n'est pas autorisé, 400 si le covoiturage est déjà terminé
      */
+    @Transactional
     public CovoiturageDTO update(int id, ModifierCovoiturageDTO request) {
     Covoiturage covoiturage = covoiturageRepository.findById(id)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Covoiturage introuvable"));

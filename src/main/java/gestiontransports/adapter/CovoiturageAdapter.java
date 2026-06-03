@@ -13,16 +13,19 @@ public class CovoiturageAdapter {
 
     /**
      * Convertit une entité {@link Covoiturage} en {@link CovoiturageDTO} pour l'exposition via l'API.
-     * Mappe les champs : nbrPlaceInitial, dateHeureDebut, adresseDepart et adresseArrivee
-     * (via {@link AdresseAdapter#toDTO}).
+     * Mappe les champs : id, nbrPlaceInitial, dateHeureDebut, statut, vehiculeId,
+     * adresseDepart et adresseArrivee (via {@link AdresseAdapter#toDTO}).
      *
      * @param covoiturage l'entité covoiturage à convertir
      * @return le DTO de sortie correspondant
      */
     public static CovoiturageDTO toDTO(Covoiturage covoiturage) {
         CovoiturageDTO dto = new CovoiturageDTO();
+        dto.setId(covoiturage.getId());
         dto.setNbrPlaceInitial(covoiturage.getNbrPlaceInitial());
         dto.setDateHeureDebut(covoiturage.getDateHeureDebut());
+        dto.setStatut(covoiturage.getStatut());
+        dto.setVehiculeId(covoiturage.getVehicule().getId());
         dto.setAdresseDepart(AdresseAdapter.toDTO(covoiturage.getAdresseDepart()));
         dto.setAdresseArrivee(AdresseAdapter.toDTO(covoiturage.getAdresseArrivee()));
         return dto;
