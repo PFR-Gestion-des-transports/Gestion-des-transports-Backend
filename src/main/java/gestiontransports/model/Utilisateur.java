@@ -34,6 +34,12 @@ public class Utilisateur {
     @JoinColumn(name = "adresse_id", nullable = false)
     private Adresse adresse;
 
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ReservationCovoiturage> reservations = new HashSet<>();
+
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Covoiturage> covoiturages = new HashSet<>();
+
     @OneToMany(mappedBy = "utilisateur")
     private List<Vehicule> vehicules = new ArrayList<>();
 
