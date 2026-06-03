@@ -2,8 +2,11 @@ package gestiontransports.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import gestiontransports.enums.Categorie;
+import gestiontransports.enums.StatutCovoiturage;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -47,6 +50,10 @@ public class Covoiturage {
     @JoinColumn(name = "utilisateur", nullable = false)
     private Utilisateur utilisateur;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "Statut", nullable = false, length = 50)
+    private StatutCovoiturage statut;
+
 
     public Covoiturage() {}
 
@@ -71,6 +78,9 @@ public class Covoiturage {
     public Set<ReservationCovoiturage> getReservations() { return reservations; }
     public void setReservations(Set<ReservationCovoiturage> reservations) { this.reservations = reservations; } 
 
+    public Utilisateur getUtilisateur() { return utilisateur; }
+    public void setUtilisateur(Utilisateur utilisateur) { this.utilisateur = utilisateur; }
 
-
+    public StatutCovoiturage getStatut() { return statut; }
+    public void setStatut(StatutCovoiturage statut) { this.statut = statut; }
 }

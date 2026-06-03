@@ -2,13 +2,17 @@ package gestiontransports.service;
 
 import gestiontransports.adapter.CovoiturageAdapter;
 import gestiontransports.dto.covoiturage.CovoiturageDTO;
+import gestiontransports.repository.UtilisateurRepository;
 import gestiontransports.adapter.AdresseAdapter;
 import gestiontransports.dto.covoiturage.CreerCovoiturageRequest;   
 import gestiontransports.dto.covoiturage.ModifierCovoiturageDTO;
+import gestiontransports.security.SecurityUtils;
 import gestiontransports.model.Adresse;
 import gestiontransports.model.Covoiturage;
+import gestiontransports.model.Utilisateur;
 import gestiontransports.repository.AdresseRepository;
 import gestiontransports.repository.CovoiturageRepository;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,13 +21,17 @@ import java.util.List;
 
 @Service
 public class CovoiturageService {
+
     private final CovoiturageRepository covoiturageRepository;
     private final AdresseRepository adresseRepository;
+    private final UtilisateurRepository utilisateurRepository;
 
     public CovoiturageService(CovoiturageRepository covoiturageRepository,
-                  AdresseRepository adresseRepository) {
+                  AdresseRepository adresseRepository,
+                  UtilisateurRepository utilisateurRepository) {
     this.covoiturageRepository = covoiturageRepository;
     this.adresseRepository = adresseRepository;
+    this.utilisateurRepository = utilisateurRepository;
     }
 
     public List<CovoiturageDTO> findAll() {
@@ -40,7 +48,11 @@ public class CovoiturageService {
     }
 
     public CovoiturageDTO create(CreerCovoiturageRequest request) {
-    Covoiturage covoiturage = CovoiturageAdapter.toModel(request);
+    
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(SecurityUtils.currentEmail())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
+        
+        Covoiturage covoiturage = CovoiturageAdapter.toModel(request);
 
     Adresse depart = adresseRepository
         .findByVilleAndRueAndNumeroRue(
@@ -58,6 +70,7 @@ public class CovoiturageService {
 
     covoiturage.setAdresseDepart(depart);
     covoiturage.setAdresseArrivee(arrivee);
+    covoiturage.setUtilisateur(utilisateur);
 
     Covoiturage saved = covoiturageRepository.save(covoiturage);
     return CovoiturageAdapter.toDTO(saved);
@@ -67,7 +80,12 @@ public class CovoiturageService {
     Covoiturage covoiturage = covoiturageRepository.findById(id)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Covoiturage introuvable"));
 
-    covoiturage.setNbrPlaceInitial(request.getNbrPlaceInitial());
+
+        if(!SecurityUtils.isUserAuthorizedAdminAndSelf(covoiturage.getUtilisateur())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès refusé");
+        }
+
+        covoiturage.setNbrPlaceInitial(request.getNbrPlaceInitial());
     covoiturage.setNbrPlaceRestante(request.getNbrPlaceRestante());
     covoiturage.setDateHeureDebut(request.getDateHeureDebut());
 
