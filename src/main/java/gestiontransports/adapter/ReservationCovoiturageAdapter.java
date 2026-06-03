@@ -12,12 +12,4 @@ public class ReservationCovoiturageAdapter {
         dto.setUtilisateur(UtilisateurAdapter.toDTO(reservation.getUtilisateur()));
         return dto;
     }
-
-    public static ReservationCovoiturage toModel(ReservationCovoiturageDTO dto) {
-        ReservationCovoiturage reservation = new ReservationCovoiturage();
-        reservation.setId(dto.getId());
-        reservation.setCovoiturage(CovoiturageAdapter.toModel(dto.getCovoiturage()));
-        reservation.setUtilisateur(UtilisateurAdapter.toModel(dto.getUtilisateur()));
-        return reservation;
-    }
 }

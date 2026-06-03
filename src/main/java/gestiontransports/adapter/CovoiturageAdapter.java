@@ -14,15 +14,6 @@ public class CovoiturageAdapter {
         return dto;
     }
 
-    public static Covoiturage toModel(CovoiturageDTO dto) {
-        Covoiturage covoiturage = new Covoiturage();
-        covoiturage.setNbrPlaceInitial(dto.getNbrPlaceInitial());
-        covoiturage.setDateHeureDebut(dto.getDateHeureDebut());
-        covoiturage.setAdresseDepart(AdresseAdapter.toModel(dto.getAdresseDepart()));
-        covoiturage.setAdresseArrivee(AdresseAdapter.toModel(dto.getAdresseArrivee()));
-        return covoiturage;
-    }
-
     public static Covoiturage toModel(CreerCovoiturageRequest request) {
         Covoiturage covoiturage = new Covoiturage();
         covoiturage.setNbrPlaceInitial(request.getNbrPlaceInitial());

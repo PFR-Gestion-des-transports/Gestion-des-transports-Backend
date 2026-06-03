@@ -1,18 +1,10 @@
 package gestiontransports.dto.adresse;
 
-import jakarta.validation.constraints.NotBlank;
-
-public class AdresseDTO {
+public class AdresseOutputDTO {
 
     private int id;
-
-    @NotBlank
     private String ville;
-
-    @NotBlank
     private String rue;
-
-    @NotBlank
     private String numeroRue;
 
     public int getId() { return id; }

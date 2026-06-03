@@ -1,5 +1,6 @@
 package gestiontransports.service;
 
+import gestiontransports.adapter.AdresseAdapter;
 import gestiontransports.adapter.UtilisateurAdapter;
 import gestiontransports.dto.utilisateur.ModifierUtilisateurRequestDTO;
 import gestiontransports.dto.utilisateur.UtilisateurDTO;
@@ -63,10 +64,7 @@ public class UtilisateurService {
                         request.getAdresse().getRue(),
                         request.getAdresse().getNumeroRue())
                 .orElseGet(() -> {
-                    Adresse nouvelleAdresse = new Adresse();
-                    nouvelleAdresse.setVille(request.getAdresse().getVille());
-                    nouvelleAdresse.setRue(request.getAdresse().getRue());
-                    nouvelleAdresse.setNumeroRue(request.getAdresse().getNumeroRue());
+                    Adresse nouvelleAdresse = AdresseAdapter.toModel(request.getAdresse());
                     return adresseRepository.save(nouvelleAdresse);
                 });
         utilisateur.setAdresse(adresse);

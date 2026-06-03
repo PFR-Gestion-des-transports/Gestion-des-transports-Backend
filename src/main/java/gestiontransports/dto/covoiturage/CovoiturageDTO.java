@@ -1,32 +1,16 @@
 package gestiontransports.dto.covoiturage;
 
 import java.time.LocalDateTime;
-
-import gestiontransports.dto.adresse.AdresseDTO;
-import gestiontransports.dto.reservation.ReservationCovoiturageDTO;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import java.util.Set;
-import jakarta.validation.constraints.NotEmpty;
-
+import gestiontransports.dto.adresse.AdresseOutputDTO;
 
 public class CovoiturageDTO {
 
     private int id;
 
-    @NotNull
     private Integer nbrPlaceInitial;
-
-    @NotNull
     private LocalDateTime dateHeureDebut;
-
-    @NotNull
-    @Valid
-    private AdresseDTO adresseDepart;
-
-    @NotNull
-    @Valid
-    private AdresseDTO adresseArrivee;
+    private AdresseOutputDTO adresseDepart;
+    private AdresseOutputDTO adresseArrivee;
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -37,9 +21,9 @@ public class CovoiturageDTO {
     public LocalDateTime getDateHeureDebut() { return dateHeureDebut; }
     public void setDateHeureDebut(LocalDateTime dateHeureDebut) { this.dateHeureDebut = dateHeureDebut; }
 
-    public AdresseDTO getAdresseDepart() { return adresseDepart; }
-    public void setAdresseDepart(AdresseDTO adresseDepart) { this.adresseDepart = adresseDepart; }
+    public AdresseOutputDTO getAdresseDepart() { return adresseDepart; }
+    public void setAdresseDepart(AdresseOutputDTO adresseDepart) { this.adresseDepart = adresseDepart; }
 
-    public AdresseDTO getAdresseArrivee() { return adresseArrivee; }
-    public void setAdresseArrivee(AdresseDTO adresseArrivee) { this.adresseArrivee = adresseArrivee; }
+    public AdresseOutputDTO getAdresseArrivee() { return adresseArrivee; }
+    public void setAdresseArrivee(AdresseOutputDTO adresseArrivee) { this.adresseArrivee = adresseArrivee; }
 }

@@ -6,7 +6,6 @@ import gestiontransports.dto.covoiturage.ModifierCovoiturageDTO;
 import gestiontransports.service.CovoiturageService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

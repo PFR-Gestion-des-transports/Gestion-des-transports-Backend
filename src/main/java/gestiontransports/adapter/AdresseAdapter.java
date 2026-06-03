@@ -1,12 +1,14 @@
 package gestiontransports.adapter;
 
-import gestiontransports.dto.adresse.AdresseDTO;
+import gestiontransports.dto.adresse.AdresseInputDTO;
+import gestiontransports.dto.adresse.AdresseOutputDTO;
 import gestiontransports.model.Adresse;
+import org.springframework.lang.NonNull;
 
 public class AdresseAdapter {
 
-    public static AdresseDTO toDTO(Adresse adresse) {
-        AdresseDTO dto = new AdresseDTO();
+    public static AdresseOutputDTO toDTO(Adresse adresse) {
+        AdresseOutputDTO dto = new AdresseOutputDTO();
         dto.setId(adresse.getId());
         dto.setVille(adresse.getVille());
         dto.setRue(adresse.getRue());
@@ -14,9 +16,8 @@ public class AdresseAdapter {
         return dto;
     }
 
-    public static Adresse toModel(AdresseDTO dto) {
+    public static @NonNull Adresse toModel(AdresseInputDTO dto) {
         Adresse adresse = new Adresse();
-        adresse.setId(dto.getId());
         adresse.setVille(dto.getVille());
         adresse.setRue(dto.getRue());
         adresse.setNumeroRue(dto.getNumeroRue());

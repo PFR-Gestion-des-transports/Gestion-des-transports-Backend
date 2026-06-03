@@ -41,7 +41,7 @@ public class CovoiturageService {
         .toList();
     }
 
-    public CovoiturageDTO findById(Integer id) {
+    public CovoiturageDTO findById(int id) {
     Covoiturage covoiturage = covoiturageRepository.findById(id)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Covoiturage introuvable"));
     return CovoiturageAdapter.toDTO(covoiturage);
@@ -76,7 +76,7 @@ public class CovoiturageService {
     return CovoiturageAdapter.toDTO(saved);
     }
 
-    public CovoiturageDTO update(Integer id, ModifierCovoiturageDTO request) {
+    public CovoiturageDTO update(int id, ModifierCovoiturageDTO request) {
     Covoiturage covoiturage = covoiturageRepository.findById(id)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Covoiturage introuvable"));
 
@@ -98,14 +98,14 @@ public class CovoiturageService {
             request.getAdresseDepart().getVille(),
             request.getAdresseDepart().getRue(),
             request.getAdresseDepart().getNumeroRue())
-        .orElseGet(() -> adresseRepository.save(adresseFromDTO(request.getAdresseDepart())));
+        .orElseGet(() -> adresseRepository.save(AdresseAdapter.toModel(request.getAdresseDepart())));
 
     Adresse arrivee = adresseRepository
         .findByVilleAndRueAndNumeroRue(
             request.getAdresseArrivee().getVille(),
             request.getAdresseArrivee().getRue(),
             request.getAdresseArrivee().getNumeroRue())
-        .orElseGet(() -> adresseRepository.save(adresseFromDTO(request.getAdresseArrivee())));
+        .orElseGet(() -> adresseRepository.save(AdresseAdapter.toModel(request.getAdresseArrivee())));
 
     covoiturage.setAdresseDepart(depart);
     covoiturage.setAdresseArrivee(arrivee);
@@ -114,19 +114,11 @@ public class CovoiturageService {
     return CovoiturageAdapter.toDTO(updated);
     }
 
-    public void deleteById(Integer id) {
+    public void deleteById(int id) {
     if (!covoiturageRepository.existsById(id)) {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Covoiturage introuvable");
     }
     covoiturageRepository.deleteById(id);
-    }
-
-    private Adresse adresseFromDTO(gestiontransports.dto.adresse.AdresseDTO dto) {
-    Adresse a = new Adresse();
-    a.setVille(dto.getVille());
-    a.setRue(dto.getRue());
-    a.setNumeroRue(dto.getNumeroRue());
-    return a;
     }
 
 }
