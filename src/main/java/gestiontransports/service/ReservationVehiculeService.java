@@ -132,12 +132,8 @@ public class ReservationVehiculeService {
 
     @Transactional
     public ReservationVehiculeDTO create(ReserverVehiculeServiceDTO request) {
-        Utilisateur utilisateur = utilisateurRepository.findById(request.getUtilisateurId())
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(SecurityUtils.currentEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
-
-        if (!SecurityUtils.isUserAuthorizedAdminAndSelf(utilisateur)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès interdit");
-        }
 
         Vehicule vehicule = vehiculeRepository.findById(request.getVehiculeId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));

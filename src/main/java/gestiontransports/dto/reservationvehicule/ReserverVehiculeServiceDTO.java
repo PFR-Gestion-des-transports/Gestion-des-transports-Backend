@@ -3,6 +3,10 @@ package gestiontransports.dto.reservationvehicule;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
+/**
+ * DTO d'entrée pour la réservation d'un véhicule de service.
+ * L'utilisateur est identifié via le token JWT — aucun identifiant utilisateur n'est requis dans le corps.
+ */
 public class ReserverVehiculeServiceDTO {
 
     @NotNull
@@ -10,9 +14,6 @@ public class ReserverVehiculeServiceDTO {
 
     @NotNull
     private LocalDateTime dateHeureFin;
-
-    @NotNull
-    private Integer utilisateurId;
 
     @NotNull
     private Integer vehiculeId;
@@ -23,9 +24,6 @@ public class ReserverVehiculeServiceDTO {
     public LocalDateTime getDateHeureFin() { return dateHeureFin; }
     public void setDateHeureFin(LocalDateTime dateHeureFin) { this.dateHeureFin = dateHeureFin; }
 
-    public int getUtilisateurId() { return utilisateurId; }
-    public void setUtilisateurId(int utilisateurId) { this.utilisateurId = utilisateurId; }
-
-    public int getVehiculeId() { return vehiculeId; }
-    public void setVehiculeId(int vehiculeId) { this.vehiculeId = vehiculeId; }
+    public Integer getVehiculeId() { return vehiculeId; }
+    public void setVehiculeId(Integer vehiculeId) { this.vehiculeId = vehiculeId; }
 }
