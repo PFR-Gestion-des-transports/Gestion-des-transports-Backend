@@ -9,6 +9,7 @@ import gestiontransports.model.Utilisateur;
 import gestiontransports.repository.AdresseRepository;
 import gestiontransports.repository.UtilisateurRepository;
 import gestiontransports.security.JwtUtil;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -76,7 +77,11 @@ public class AuthService {
         utilisateur.setAdresse(adresse);
         utilisateur.setRoles(Set.of(Role.COLLABORATEUR));
 
-        utilisateurRepository.save(utilisateur);
+        try {
+            utilisateurRepository.save(utilisateur);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email déjà utilisé");
+        }
 
         String token = jwtUtil.generateToken(
                 utilisateur.getEmail(),

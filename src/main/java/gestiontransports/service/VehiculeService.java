@@ -12,6 +12,7 @@ import gestiontransports.model.Vehicule;
 import gestiontransports.repository.UtilisateurRepository;
 import gestiontransports.repository.VehiculeRepository;
 import gestiontransports.security.SecurityUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,7 +73,11 @@ public class VehiculeService {
         vehicule.setStatutVehicule(request.getStatutVehicule());
         vehicule.setUtilisateur(utilisateur);
 
-        return VehiculeAdapter.toDTO(vehiculeRepository.save(vehicule));
+        try {
+            return VehiculeAdapter.toDTO(vehiculeRepository.save(vehicule));
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Immatriculation déjà utilisée");
+        }
     }
 
     /**
@@ -162,7 +167,11 @@ public class VehiculeService {
         vehicule.setMotorisation(request.getMotorisation());
         vehicule.setStatutVehicule(request.getStatutVehicule());
 
-        return VehiculeAdapter.toDTO(vehiculeRepository.save(vehicule));
+        try {
+            return VehiculeAdapter.toDTO(vehiculeRepository.save(vehicule));
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Immatriculation déjà utilisée");
+        }
     }
 
     /**
