@@ -160,7 +160,6 @@ public class VehiculeService {
         vehicule.setNombreDePlace(request.getNombreDePlace());
         vehicule.setCategorie(request.getCategorie());
         vehicule.setMotorisation(request.getMotorisation());
-        vehicule.setEstVehiculeService(request.getEstVehiculeService());
         vehicule.setStatutVehicule(request.getStatutVehicule());
 
         return VehiculeAdapter.toDTO(vehiculeRepository.save(vehicule));

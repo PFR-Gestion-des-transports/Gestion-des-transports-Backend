@@ -43,9 +43,6 @@ public class ModifierVehiculeRequestDTO {
     private Motorisation motorisation;
 
     @NotNull
-    private Boolean estVehiculeService;
-
-    @NotNull
     private StatutVehicule statutVehicule;
 
     public String getImmatriculation() { return immatriculation; }
@@ -71,9 +68,6 @@ public class ModifierVehiculeRequestDTO {
 
     public Motorisation getMotorisation() { return motorisation; }
     public void setMotorisation(Motorisation motorisation) { this.motorisation = motorisation; }
-
-    public Boolean getEstVehiculeService() { return estVehiculeService; }
-    public void setEstVehiculeService(Boolean estVehiculeService) { this.estVehiculeService = estVehiculeService; }
 
     public StatutVehicule getStatutVehicule() { return statutVehicule; }
     public void setStatutVehicule(StatutVehicule statutVehicule) { this.statutVehicule = statutVehicule; }
