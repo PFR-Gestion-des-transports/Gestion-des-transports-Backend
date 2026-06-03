@@ -1,5 +1,6 @@
 package gestiontransports.security;
 
+import gestiontransports.service.TokenBlacklistService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,10 +20,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
+    private final TokenBlacklistService tokenBlacklistService;
 
-    public JwtFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService) {
+    public JwtFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService,
+                     TokenBlacklistService tokenBlacklistService) {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
+        this.tokenBlacklistService = tokenBlacklistService;
     }
 
     @Override
@@ -41,6 +45,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
         try {
             String email = jwtUtil.extractEmail(token);
+            String jti = jwtUtil.extractJti(token);
+
+            if (tokenBlacklistService.estRevoque(jti)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
 
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);

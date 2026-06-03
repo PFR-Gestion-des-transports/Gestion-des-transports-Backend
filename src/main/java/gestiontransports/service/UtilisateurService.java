@@ -73,9 +73,13 @@ public class UtilisateurService {
     }
 
     public void deleteById(int id) {
-        if (!utilisateurRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable");
+        Utilisateur utilisateur = utilisateurRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
+
+        if (!SecurityUtils.isUserAuthorizedAdminAndSelf(utilisateur)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès interdit");
         }
+
         utilisateurRepository.deleteById(id);
     }
 }

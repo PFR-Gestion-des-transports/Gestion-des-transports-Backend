@@ -32,7 +32,9 @@ public class AuthController {
     }
 
     @PostMapping("/se-deconnecter")
-    public ResponseEntity<Map<String, String>> seDeconnecter() {
+    public ResponseEntity<Map<String, String>> seDeconnecter(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.substring(7);
+        authService.seDeconnecter(token);
         return ResponseEntity.ok(Map.of("message", "Déconnexion réussie"));
     }
 }

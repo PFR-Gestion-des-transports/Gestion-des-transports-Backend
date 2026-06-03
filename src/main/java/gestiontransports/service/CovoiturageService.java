@@ -3,9 +3,12 @@ package gestiontransports.service;
 import gestiontransports.adapter.CovoiturageAdapter;
 import gestiontransports.dto.covoiturage.CovoiturageDTO;
 import gestiontransports.repository.UtilisateurRepository;
+import gestiontransports.model.Vehicule;
+import gestiontransports.enums.StatutCovoiturage;
 import gestiontransports.adapter.AdresseAdapter;
 import gestiontransports.dto.covoiturage.CreerCovoiturageRequest;   
 import gestiontransports.dto.covoiturage.ModifierCovoiturageDTO;
+import gestiontransports.repository.VehiculeRepository;
 import gestiontransports.security.SecurityUtils;
 import gestiontransports.model.Adresse;
 import gestiontransports.model.Covoiturage;
@@ -25,13 +28,16 @@ public class CovoiturageService {
     private final CovoiturageRepository covoiturageRepository;
     private final AdresseRepository adresseRepository;
     private final UtilisateurRepository utilisateurRepository;
+    private final VehiculeRepository vehiculeRepository;
 
     public CovoiturageService(CovoiturageRepository covoiturageRepository,
                   AdresseRepository adresseRepository,
-                  UtilisateurRepository utilisateurRepository) {
+                  UtilisateurRepository utilisateurRepository,
+                  VehiculeRepository vehiculeRepository) {
     this.covoiturageRepository = covoiturageRepository;
     this.adresseRepository = adresseRepository;
     this.utilisateurRepository = utilisateurRepository;
+    this.vehiculeRepository = vehiculeRepository;
     }
 
     public List<CovoiturageDTO> findAll() {
@@ -54,6 +60,9 @@ public class CovoiturageService {
         
         Covoiturage covoiturage = CovoiturageAdapter.toModel(request);
 
+        Vehicule vehicule = vehiculeRepository.findById(request.getVehiculeId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
+
     Adresse depart = adresseRepository
         .findByVilleAndRueAndNumeroRue(
             request.getAdresseDepart().getVille(),
@@ -71,6 +80,8 @@ public class CovoiturageService {
     covoiturage.setAdresseDepart(depart);
     covoiturage.setAdresseArrivee(arrivee);
     covoiturage.setUtilisateur(utilisateur);
+    covoiturage.setVehicule(vehicule);
+    covoiturage.setStatut(StatutCovoiturage.PAS_COMMENCER);
 
     Covoiturage saved = covoiturageRepository.save(covoiturage);
     return CovoiturageAdapter.toDTO(saved);
@@ -107,18 +118,26 @@ public class CovoiturageService {
             request.getAdresseArrivee().getNumeroRue())
         .orElseGet(() -> adresseRepository.save(AdresseAdapter.toModel(request.getAdresseArrivee())));
 
+    Vehicule vehicule = vehiculeRepository.findById(request.getVehiculeId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
+
     covoiturage.setAdresseDepart(depart);
     covoiturage.setAdresseArrivee(arrivee);
-
+    covoiturage.setVehicule(vehicule);
+    covoiturage.setStatut(request.getStatut());
     Covoiturage updated = covoiturageRepository.save(covoiturage);
     return CovoiturageAdapter.toDTO(updated);
     }
 
     public void deleteById(int id) {
-    if (!covoiturageRepository.existsById(id)) {
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Covoiturage introuvable");
-    }
-    covoiturageRepository.deleteById(id);
+        Covoiturage covoiturage = covoiturageRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Covoiturage introuvable"));
+
+        if (!SecurityUtils.isUserAuthorizedAdminAndSelf(covoiturage.getUtilisateur())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès refusé");
+        }
+
+        covoiturageRepository.deleteById(id);
     }
 
 }
