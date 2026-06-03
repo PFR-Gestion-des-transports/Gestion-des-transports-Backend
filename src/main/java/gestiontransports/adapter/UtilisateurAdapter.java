@@ -12,7 +12,6 @@ public class UtilisateurAdapter {
         dto.setNom(utilisateur.getNom());
         dto.setEmail(utilisateur.getEmail());
         dto.setAdresse(AdresseAdapter.toDTO(utilisateur.getAdresse()));
-        dto.setRoles(utilisateur.getRoles());
         return dto;
     }
 }

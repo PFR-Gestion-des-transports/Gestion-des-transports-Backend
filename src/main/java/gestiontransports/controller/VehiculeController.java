@@ -5,6 +5,7 @@ import gestiontransports.dto.vehicule.ModifierStatutVehiculeRequestDTO;
 import gestiontransports.dto.vehicule.ModifierVehiculeRequestDTO;
 import gestiontransports.dto.vehicule.VehiculeDTO;
 import gestiontransports.service.VehiculeService;
+import java.time.LocalDateTime;
 import java.util.List;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,13 @@ public class VehiculeController {
 
     public VehiculeController(VehiculeService vehiculeService) {
         this.vehiculeService = vehiculeService;
+    }
+
+    @GetMapping("/service/mes-reservations")
+    public ResponseEntity<List<VehiculeDTO>> findVehiculesServiceReservesParUtilisateur(
+            @RequestParam LocalDateTime dateDebut,
+            @RequestParam LocalDateTime dateFin) {
+        return ResponseEntity.ok(vehiculeService.findVehiculesServiceReservesParUtilisateur(dateDebut, dateFin));
     }
 
     @GetMapping("/disponibles")

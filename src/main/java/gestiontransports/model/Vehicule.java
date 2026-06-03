@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Vehicule")
@@ -58,6 +60,9 @@ public class Vehicule {
     @OneToMany(mappedBy = "vehicule")
     private List<Covoiturage> covoiturages = new ArrayList<>();
 
+    @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReservationVehicule> reservations = new ArrayList<>();
+
     public Vehicule() {}
 
     public Integer getId() { return id; }
@@ -96,6 +101,9 @@ public class Vehicule {
     public Utilisateur getUtilisateur() { return utilisateur; }
     public void setUtilisateur(Utilisateur utilisateur) { this.utilisateur = utilisateur; }
 
+    public List<ReservationVehicule> getReservations() { return reservations; }
+    public void setReservations(List<ReservationVehicule> reservations) { this.reservations = reservations; }
+    
     public List<Covoiturage> getCovoiturages() { return covoiturages; }
     public void setCovoiturages(List<Covoiturage> covoiturages) { this.covoiturages = covoiturages; }
 }
