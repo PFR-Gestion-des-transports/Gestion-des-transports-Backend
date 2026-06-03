@@ -28,6 +28,13 @@ public class VehiculeController {
         this.vehiculeService = vehiculeService;
     }
 
+    /**
+     * Retourne les véhicules de service réservés par l'utilisateur connecté sur un créneau donné.
+     *
+     * @param dateDebut début du créneau à vérifier
+     * @param dateFin   fin du créneau à vérifier
+     * @return une réponse HTTP 200 contenant la liste des véhicules concernés
+     */
     @GetMapping("/service/mes-reservations")
     public ResponseEntity<List<VehiculeDTO>> findVehiculesServiceReservesParUtilisateur(
             @RequestParam LocalDateTime dateDebut,
@@ -35,6 +42,12 @@ public class VehiculeController {
         return ResponseEntity.ok(vehiculeService.findVehiculesServiceReservesParUtilisateur(dateDebut, dateFin));
     }
 
+    /**
+     * Retourne les véhicules personnels EN_SERVICE de l'utilisateur connecté,
+     * disponibles pour être associés à un covoiturage.
+     *
+     * @return une réponse HTTP 200 contenant la liste des véhicules disponibles
+     */
     @GetMapping("/disponibles")
     public ResponseEntity<List<VehiculeDTO>> findVehiculesDisponibles() {
         return ResponseEntity.ok(vehiculeService.findVehiculesDisponibles());

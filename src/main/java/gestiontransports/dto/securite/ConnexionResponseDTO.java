@@ -8,6 +8,11 @@ public class ConnexionResponseDTO {
     /** Token JWT à fournir dans l'en-tête Authorization des requêtes sécurisées. */
     private String token;
 
+    /**
+     * Construit la réponse d'authentification avec le token JWT généré.
+     *
+     * @param token le token JWT à transmettre au client
+     */
     public ConnexionResponseDTO(String token) {
         this.token = token;
     }

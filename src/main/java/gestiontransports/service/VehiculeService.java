@@ -75,6 +75,13 @@ public class VehiculeService {
         return VehiculeAdapter.toDTO(vehiculeRepository.save(vehicule));
     }
 
+    /**
+     * Retourne les véhicules de service réservés par l'utilisateur connecté sur un créneau donné.
+     *
+     * @param dateDebut début du créneau à vérifier
+     * @param dateFin   fin du créneau à vérifier
+     * @return la liste des véhicules de service avec une réservation active chevauchant le créneau
+     */
     public List<VehiculeDTO> findVehiculesServiceReservesParUtilisateur(LocalDateTime dateDebut, LocalDateTime dateFin) {
         Utilisateur utilisateur = utilisateurRepository.findByEmail(SecurityUtils.currentEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
@@ -84,6 +91,12 @@ public class VehiculeService {
                 .toList();
     }
 
+    /**
+     * Retourne les véhicules personnels EN_SERVICE appartenant à l'utilisateur connecté,
+     * disponibles pour être associés à un covoiturage.
+     *
+     * @return la liste des véhicules personnels disponibles
+     */
     public List<VehiculeDTO> findVehiculesDisponibles() {
         Utilisateur utilisateur = utilisateurRepository.findByEmail(SecurityUtils.currentEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
