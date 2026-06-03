@@ -2,6 +2,7 @@ package gestiontransports.service;
 
 import gestiontransports.adapter.CovoiturageAdapter;
 import gestiontransports.dto.covoiturage.CovoiturageDTO;
+import gestiontransports.adapter.AdresseAdapter;
 import gestiontransports.dto.covoiturage.CreerCovoiturageRequest;   
 import gestiontransports.dto.covoiturage.ModifierCovoiturageDTO;
 import gestiontransports.model.Adresse;
@@ -46,14 +47,14 @@ public class CovoiturageService {
             request.getAdresseDepart().getVille(),
             request.getAdresseDepart().getRue(),
             request.getAdresseDepart().getNumeroRue())
-        .orElseGet(() -> adresseRepository.save(adresseFromDTO(request.getAdresseDepart())));
+        .orElseGet(() -> adresseRepository.save(AdresseAdapter.toModel(request.getAdresseDepart())));
 
     Adresse arrivee = adresseRepository
         .findByVilleAndRueAndNumeroRue(
             request.getAdresseArrivee().getVille(),
             request.getAdresseArrivee().getRue(),
             request.getAdresseArrivee().getNumeroRue())
-        .orElseGet(() -> adresseRepository.save(adresseFromDTO(request.getAdresseArrivee())));
+        .orElseGet(() -> adresseRepository.save(AdresseAdapter.toModel(request.getAdresseArrivee())));
 
     covoiturage.setAdresseDepart(depart);
     covoiturage.setAdresseArrivee(arrivee);

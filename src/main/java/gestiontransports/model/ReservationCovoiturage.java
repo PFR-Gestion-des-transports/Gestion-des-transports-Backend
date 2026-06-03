@@ -7,7 +7,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ForeignKey;
 
 @Entity
 @Table(name = "ReservationCovoiturage")
@@ -17,18 +16,12 @@ public class ReservationCovoiturage {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "covoiturage", nullable = false,
-        foreignKey = @ForeignKey(
-            foreignKeyDefinition = "FOREIGN KEY (covoiturage) REFERENCES Covoiturage(id) ON DELETE RESTRICT ON UPDATE CASCADE"
-        ))
-        private Covoiturage covoiturage;
+    @JoinColumn(name = "covoiturage", nullable = false)
+    private Covoiturage covoiturage;
     
     @ManyToOne
-    @JoinColumn(name = "utilisateur", nullable = false,
-        foreignKey = @ForeignKey(
-            foreignKeyDefinition = "FOREIGN KEY (utilisateur) REFERENCES Utilisateur(id) ON DELETE RESTRICT ON UPDATE CASCADE"
-        ))
-        private Utilisateur utilisateur;
+    @JoinColumn(name = "utilisateur", nullable = false)
+    private Utilisateur utilisateur;
 
     public ReservationCovoiturage() {}
 
