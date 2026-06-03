@@ -85,6 +85,10 @@ public class CovoiturageService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès refusé");
         }
 
+        if(covoiturage.getStatut() == gestiontransports.enums.StatutCovoiturage.TERMINE) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Impossible de modifier un covoiturage terminé");
+        }
+
         covoiturage.setNbrPlaceInitial(request.getNbrPlaceInitial());
     covoiturage.setNbrPlaceRestante(request.getNbrPlaceRestante());
     covoiturage.setDateHeureDebut(request.getDateHeureDebut());
