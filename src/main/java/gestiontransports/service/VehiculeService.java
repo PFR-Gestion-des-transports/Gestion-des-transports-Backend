@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -29,11 +30,14 @@ public class VehiculeService {
 
     private final VehiculeRepository vehiculeRepository;
     private final UtilisateurRepository utilisateurRepository;
+    private final ReservationVehiculeService reservationVehiculeService;
 
     public VehiculeService(VehiculeRepository vehiculeRepository,
-                           UtilisateurRepository utilisateurRepository) {
+                           UtilisateurRepository utilisateurRepository,
+                           ReservationVehiculeService reservationVehiculeService) {
         this.vehiculeRepository = vehiculeRepository;
         this.utilisateurRepository = utilisateurRepository;
+        this.reservationVehiculeService = reservationVehiculeService;
     }
 
     /**
@@ -71,13 +75,15 @@ public class VehiculeService {
         return VehiculeAdapter.toDTO(vehiculeRepository.save(vehicule));
     }
 
-    /**
-     * Retourne les véhicules personnels disponibles de l'utilisateur authentifié.
-     * Seuls les véhicules ayant le statut {@code EN_SERVICE} et n'appartenant pas à la flotte de service sont inclus.
-     *
-     * @return la liste des véhicules personnels en service appartenant à l'utilisateur courant
-     * @throws org.springframework.web.server.ResponseStatusException 404 si l'utilisateur authentifié est introuvable en base
-     */
+    public List<VehiculeDTO> findVehiculesServiceReservesParUtilisateur(LocalDateTime dateDebut, LocalDateTime dateFin) {
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(SecurityUtils.currentEmail())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
+        return reservationVehiculeService.findActivesByUtilisateurAndOverlap(utilisateur, dateDebut, dateFin)
+                .stream()
+                .map(r -> VehiculeAdapter.toDTO(r.getVehicule()))
+                .toList();
+    }
+
     public List<VehiculeDTO> findVehiculesDisponibles() {
         Utilisateur utilisateur = utilisateurRepository.findByEmail(SecurityUtils.currentEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
