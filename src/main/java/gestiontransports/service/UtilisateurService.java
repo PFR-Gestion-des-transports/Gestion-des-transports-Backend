@@ -10,6 +10,7 @@ import gestiontransports.repository.UtilisateurRepository;
 import gestiontransports.security.SecurityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -33,22 +34,23 @@ public class UtilisateurService {
                 .toList();
     }
 
-    public UtilisateurDTO findById(Integer id) {
+    public UtilisateurDTO findById(int id) {
         Utilisateur utilisateur = utilisateurRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
 
-        if (!SecurityUtils.isAdmin() && !utilisateur.getEmail().equals(SecurityUtils.currentEmail())) {
+        if (!SecurityUtils.isUserAuthorizedAdminAndSelf(utilisateur)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès interdit");
         }
 
         return UtilisateurAdapter.toDTO(utilisateur);
     }
 
-    public UtilisateurDTO update(Integer id, ModifierUtilisateurRequestDTO request) {
+    @Transactional
+    public UtilisateurDTO update(int id, ModifierUtilisateurRequestDTO request) {
         Utilisateur utilisateur = utilisateurRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
 
-        if (!SecurityUtils.isAdmin() && !utilisateur.getEmail().equals(SecurityUtils.currentEmail())) {
+        if (!SecurityUtils.isUserAuthorizedAdminAndSelf(utilisateur)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès interdit");
         }
 
@@ -72,12 +74,10 @@ public class UtilisateurService {
         return UtilisateurAdapter.toDTO(utilisateurRepository.save(utilisateur));
     }
 
-    public void deleteById(Integer id) {
+    public void deleteById(int id) {
         if (!utilisateurRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable");
         }
         utilisateurRepository.deleteById(id);
     }
-
-
 }
