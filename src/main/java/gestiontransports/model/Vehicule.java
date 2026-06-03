@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Entité représentant un véhicule utilisable pour les covoiturages d'entreprise.
