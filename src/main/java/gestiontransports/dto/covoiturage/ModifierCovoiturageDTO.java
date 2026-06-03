@@ -27,7 +27,7 @@ public class ModifierCovoiturageDTO {
     private AdresseInputDTO adresseArrivee;
 
     @NotNull
-    private int vehiculeId;
+    private Integer vehiculeId;
 
     @NotNull
     private StatutCovoiturage statut;
@@ -47,8 +47,8 @@ public class ModifierCovoiturageDTO {
     public AdresseInputDTO getAdresseArrivee() { return adresseArrivee; }
     public void setAdresseArrivee(AdresseInputDTO adresseArrivee) { this.adresseArrivee = adresseArrivee; }
 
-    public int getVehiculeId() { return vehiculeId; }
-    public void setVehiculeId(int vehiculeId) { this.vehiculeId = vehiculeId; }
+    public Integer getVehiculeId() { return vehiculeId; }
+    public void setVehiculeId(Integer vehiculeId) { this.vehiculeId = vehiculeId; }
 
     public StatutCovoiturage getStatut() { return statut; }
     public void setStatut(StatutCovoiturage statut) { this.statut = statut; }

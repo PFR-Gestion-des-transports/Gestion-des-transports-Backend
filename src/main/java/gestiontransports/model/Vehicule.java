@@ -55,7 +55,7 @@ public class Vehicule {
     @JoinColumn(name = "utilisateur_id", nullable = false)
     private Utilisateur utilisateur;
 
-    @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "vehicule")
     private List<Covoiturage> covoiturages = new ArrayList<>();
 
     public Vehicule() {}
