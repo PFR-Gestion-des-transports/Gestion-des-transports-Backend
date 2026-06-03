@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import gestiontransports.dto.adresse.AdresseInputDTO;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -12,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 public class CreerCovoiturageRequest {
 
     @NotNull
+    @Min(1)
     /** Nombre de places proposées lors de la création du covoiturage. */
     private Integer nbrPlaceInitial;
 

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import gestiontransports.dto.adresse.AdresseInputDTO;
 import gestiontransports.enums.StatutCovoiturage;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -13,12 +14,9 @@ import jakarta.validation.constraints.NotNull;
 public class ModifierCovoiturageDTO {
 
     @NotNull
+    @Min(1)
     /** Nombre de places initial du covoiturage (capacité totale). */
     private Integer nbrPlaceInitial;
-
-    @NotNull
-    /** Nombre de places encore disponibles à la réservation. */
-    private Integer nbrPlaceRestante;
 
     @NotNull
     private LocalDateTime dateHeureDebut;
@@ -39,9 +37,6 @@ public class ModifierCovoiturageDTO {
 
     public Integer getNbrPlaceInitial() { return nbrPlaceInitial; }
     public void setNbrPlaceInitial(Integer nbrPlaceInitial) { this.nbrPlaceInitial = nbrPlaceInitial; }
-
-    public Integer getNbrPlaceRestante() { return nbrPlaceRestante; }
-    public void setNbrPlaceRestante(Integer nbrPlaceRestante) { this.nbrPlaceRestante = nbrPlaceRestante; }
 
     public LocalDateTime getDateHeureDebut() { return dateHeureDebut; }
     public void setDateHeureDebut(LocalDateTime dateHeureDebut) { this.dateHeureDebut = dateHeureDebut; }

@@ -3,6 +3,7 @@ package gestiontransports.controller;
 import gestiontransports.dto.covoiturage.CovoiturageDTO;
 import gestiontransports.dto.covoiturage.CreerCovoiturageRequest;
 import gestiontransports.dto.covoiturage.ModifierCovoiturageDTO;
+import gestiontransports.dto.covoiturage.ModifierPlacesCovoiturageDTO;
 import gestiontransports.service.CovoiturageService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -67,6 +68,20 @@ public class CovoiturageController {
     public ResponseEntity<CovoiturageDTO> update(@PathVariable Integer id,
                                                   @Valid @RequestBody ModifierCovoiturageDTO request) {
         return ResponseEntity.ok(covoiturageService.update(id, request));
+    }
+
+    /**
+     * Met à jour le nombre de places restantes d'un covoiturage.
+     * Permet au conducteur de signaler qu'un passager l'a rejoint hors application.
+     *
+     * @param id      l'identifiant du covoiturage à modifier
+     * @param request le nouveau nombre de places restantes (entre 0 et nbrPlaceInitial)
+     * @return une réponse HTTP 200 contenant le covoiturage mis à jour
+     */
+    @PatchMapping("/{id}/places")
+    public ResponseEntity<CovoiturageDTO> modifierPlaces(@PathVariable Integer id,
+                                                          @Valid @RequestBody ModifierPlacesCovoiturageDTO request) {
+        return ResponseEntity.ok(covoiturageService.modifierPlaces(id, request));
     }
 
     /**

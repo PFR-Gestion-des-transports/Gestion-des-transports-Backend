@@ -2,6 +2,7 @@ package gestiontransports.service;
 
 import gestiontransports.adapter.CovoiturageAdapter;
 import gestiontransports.dto.covoiturage.CovoiturageDTO;
+import gestiontransports.dto.covoiturage.ModifierPlacesCovoiturageDTO;
 import gestiontransports.repository.UtilisateurRepository;
 import gestiontransports.model.Vehicule;
 import gestiontransports.enums.StatutCovoiturage;
@@ -91,6 +92,11 @@ public class CovoiturageService {
         Vehicule vehicule = vehiculeRepository.findById(request.getVehiculeId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
 
+        if (request.getNbrPlaceInitial() > vehicule.getNombreDePlace()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Le nombre de places initial ne peut pas dépasser la capacité du véhicule (" + vehicule.getNombreDePlace() + ")");
+        }
+
     Adresse depart = adresseRepository
         .findByVilleAndRueAndNumeroRue(
             request.getAdresseDepart().getVille(),
@@ -141,7 +147,6 @@ public class CovoiturageService {
         }
 
         covoiturage.setNbrPlaceInitial(request.getNbrPlaceInitial());
-    covoiturage.setNbrPlaceRestante(request.getNbrPlaceRestante());
     covoiturage.setDateHeureDebut(request.getDateHeureDebut());
 
     Adresse depart = adresseRepository
@@ -161,12 +166,47 @@ public class CovoiturageService {
     Vehicule vehicule = vehiculeRepository.findById(request.getVehiculeId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
 
+        if (request.getNbrPlaceInitial() > vehicule.getNombreDePlace()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Le nombre de places initial ne peut pas dépasser la capacité du véhicule (" + vehicule.getNombreDePlace() + ")");
+        }
+
     covoiturage.setAdresseDepart(depart);
     covoiturage.setAdresseArrivee(arrivee);
     covoiturage.setVehicule(vehicule);
     covoiturage.setStatut(request.getStatut());
     Covoiturage updated = covoiturageRepository.save(covoiturage);
     return CovoiturageAdapter.toDTO(updated);
+    }
+
+    /**
+     * Met à jour le nombre de places restantes d'un covoiturage.
+     * Permet au conducteur de signaler qu'un passager l'a rejoint hors application.
+     * La valeur doit être comprise entre 0 et {@code nbrPlaceInitial}.
+     *
+     * @param id      l'identifiant du covoiturage à modifier
+     * @param request le DTO contenant le nouveau nombre de places restantes
+     * @return le DTO mis à jour du covoiturage
+     * @throws org.springframework.web.server.ResponseStatusException 404 si le covoiturage est introuvable,
+     *         403 si l'appelant n'est pas autorisé, 400 si la valeur dépasse {@code nbrPlaceInitial}
+     */
+    @Transactional
+    public CovoiturageDTO modifierPlaces(int id, ModifierPlacesCovoiturageDTO request) {
+        Covoiturage covoiturage = covoiturageRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Covoiturage introuvable"));
+
+        if (!SecurityUtils.isUserAuthorizedAdminAndSelf(covoiturage.getUtilisateur())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès refusé");
+        }
+
+        if (request.getNbrPlaceRestante() > covoiturage.getNbrPlaceInitial()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Le nombre de places restantes ne peut pas dépasser le nombre de places initiales ("
+                            + covoiturage.getNbrPlaceInitial() + ")");
+        }
+
+        covoiturage.setNbrPlaceRestante(request.getNbrPlaceRestante());
+        return CovoiturageAdapter.toDTO(covoiturageRepository.save(covoiturage));
     }
 
     /**
