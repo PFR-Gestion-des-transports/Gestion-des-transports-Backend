@@ -130,10 +130,14 @@ public class CovoiturageService {
     }
 
     public void deleteById(int id) {
-    if (!covoiturageRepository.existsById(id)) {
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Covoiturage introuvable");
-    }
-    covoiturageRepository.deleteById(id);
+        Covoiturage covoiturage = covoiturageRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Covoiturage introuvable"));
+
+        if (!SecurityUtils.isUserAuthorizedAdminAndSelf(covoiturage.getUtilisateur())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès refusé");
+        }
+
+        covoiturageRepository.deleteById(id);
     }
 
 }

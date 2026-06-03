@@ -8,8 +8,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class JwtUtil {
@@ -22,6 +25,7 @@ public class JwtUtil {
 
     public String generateToken(String email, List<String> roles) {
         return Jwts.builder()
+                .id(UUID.randomUUID().toString())
                 .subject(email)
                 .claim("roles", roles)
                 .issuedAt(new Date())
@@ -32,6 +36,17 @@ public class JwtUtil {
 
     public String extractEmail(String token) {
         return getClaims(token).getSubject();
+    }
+
+    public String extractJti(String token) {
+        return getClaims(token).getId();
+    }
+
+    public LocalDateTime extractExpiration(String token) {
+        return getClaims(token).getExpiration()
+                .toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 
     public boolean isTokenValid(String token, String email) {

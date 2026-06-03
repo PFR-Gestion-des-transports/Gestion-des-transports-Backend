@@ -25,14 +25,18 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
+    private final TokenBlacklistService tokenBlacklistService;
+
     public AuthService(UtilisateurRepository utilisateurRepository,
                        AdresseRepository adresseRepository,
                        PasswordEncoder passwordEncoder,
-                       JwtUtil jwtUtil) {
+                       JwtUtil jwtUtil,
+                       TokenBlacklistService tokenBlacklistService) {
         this.utilisateurRepository = utilisateurRepository;
         this.adresseRepository = adresseRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
+        this.tokenBlacklistService = tokenBlacklistService;
     }
 
     @Transactional
@@ -81,5 +85,9 @@ public class AuthService {
                 utilisateur.getRoles().stream().map(Enum::name).toList()
         );
         return new ConnexionResponseDTO(token);
+    }
+
+    public void seDeconnecter(String token) {
+        tokenBlacklistService.revoquer(token);
     }
 }
