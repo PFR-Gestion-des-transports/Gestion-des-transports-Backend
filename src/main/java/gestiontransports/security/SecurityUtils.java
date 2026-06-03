@@ -1,20 +1,29 @@
 package gestiontransports.security;
 
 import gestiontransports.model.Utilisateur;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.server.ResponseStatusException;
 
 public class SecurityUtils {
 
     private SecurityUtils() {}
 
+    private static Authentication getAuthenticationOrThrow() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Non authentifié");
+        }
+        return auth;
+    }
+
     public static String currentEmail() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
+        return getAuthenticationOrThrow().getName();
     }
 
     public static boolean isAdmin() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return auth.getAuthorities().stream()
+        return getAuthenticationOrThrow().getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMINISTRATEUR"));
     }
 

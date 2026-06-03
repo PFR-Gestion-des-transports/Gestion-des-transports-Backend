@@ -3,10 +3,6 @@ package gestiontransports.dto.covoiturage;
 import java.time.LocalDateTime;
 
 import gestiontransports.dto.adresse.AdresseInputDTO;
-import gestiontransports.dto.vehicule.VehiculeDTO;
-
-import gestiontransports.enums.StatutCovoiturage;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
@@ -27,7 +23,7 @@ public class CreerCovoiturageRequest {
     private AdresseInputDTO adresseArrivee;
 
     @NotNull
-    private int vehiculeId;
+    private Integer vehiculeId;
 
     public Integer getNbrPlaceInitial() { return nbrPlaceInitial; }
     public void setNbrPlaceInitial(Integer nbrPlaceInitial) { this.nbrPlaceInitial = nbrPlaceInitial; }
@@ -41,6 +37,6 @@ public class CreerCovoiturageRequest {
     public AdresseInputDTO getAdresseArrivee() { return adresseArrivee; }
     public void setAdresseArrivee(AdresseInputDTO adresseArrivee) { this.adresseArrivee = adresseArrivee; }
 
-    public int getVehiculeId() { return vehiculeId; }
-    public void setVehiculeId(int vehiculeId) { this.vehiculeId = vehiculeId; }
+    public Integer getVehiculeId() { return vehiculeId; }
+    public void setVehiculeId(Integer vehiculeId) { this.vehiculeId = vehiculeId; }
 }
