@@ -1,7 +1,11 @@
 package gestiontransports.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import gestiontransports.enums.Role;
 import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,15 +26,22 @@ public class Utilisateur {
     @Column(name = "Email", nullable = false, unique = true, length = 255)
     private String email;
 
+    @JsonIgnore
     @Column(name = "MotDePasse", nullable = false, length = 60)
     private String motDePasse;
 
     @ManyToOne
-    @JoinColumn(name = "AdresseId", nullable = false,
-        foreignKey = @ForeignKey(
-            foreignKeyDefinition = "FOREIGN KEY (AdresseId) REFERENCES Adresse(Id) ON DELETE RESTRICT ON UPDATE CASCADE"
-        ))
+    @JoinColumn(name = "adresse_id", nullable = false)
     private Adresse adresse;
+
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ReservationCovoiturage> reservations = new HashSet<>();
+
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Covoiturage> covoiturages = new HashSet<>();
+
+    @OneToMany(mappedBy = "utilisateur")
+    private List<Vehicule> vehicules = new ArrayList<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "utilisateur_roles", joinColumns = @JoinColumn(name = "utilisateur_id"))
@@ -60,4 +71,7 @@ public class Utilisateur {
 
     public Set<Role> getRoles() { return roles; }
     public void setRoles(Set<Role> roles) { this.roles = roles; }
+
+    public List<Vehicule> getVehicules() { return vehicules; }
+    public void setVehicules(List<Vehicule> vehicules) { this.vehicules = vehicules; }
 }

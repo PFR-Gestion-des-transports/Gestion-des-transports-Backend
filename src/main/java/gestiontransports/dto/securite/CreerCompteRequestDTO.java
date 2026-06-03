@@ -1,13 +1,9 @@
-package gestiontransports.dto;
+package gestiontransports.dto.securite;
 
-import gestiontransports.model.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 
-import java.util.Set;
-
-public class CreerCompteRequest {
+public class CreerCompteRequestDTO {
 
     @NotBlank
     private String prenom;
@@ -31,9 +27,6 @@ public class CreerCompteRequest {
     @NotBlank
     private String numeroRue;
 
-    @NotEmpty
-    private Set<Role> roles;
-
     public String getPrenom() { return prenom; }
     public void setPrenom(String prenom) { this.prenom = prenom; }
 
@@ -54,7 +47,4 @@ public class CreerCompteRequest {
 
     public String getNumeroRue() { return numeroRue; }
     public void setNumeroRue(String numeroRue) { this.numeroRue = numeroRue; }
-
-    public Set<Role> getRoles() { return roles; }
-    public void setRoles(Set<Role> roles) { this.roles = roles; }
 }

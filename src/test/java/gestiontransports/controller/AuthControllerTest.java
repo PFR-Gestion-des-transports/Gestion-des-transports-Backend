@@ -10,8 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -56,13 +56,12 @@ class AuthControllerTest {
                 "motDePasse", "password123",
                 "ville", "Paris",
                 "rue", "Rue de la Paix",
-                "numeroRue", "1",
-                "roles", List.of("COLLABORATEUR")
+                "numeroRue", "1"
         );
 
         mockMvc.perform(post("/auth/creer-compte")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                        .content(Objects.requireNonNull(objectMapper.writeValueAsString(request))))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.token").isNotEmpty());
     }
@@ -77,13 +76,12 @@ class AuthControllerTest {
                 "motDePasse", "password123",
                 "ville", "Paris",
                 "rue", "Rue de la Paix",
-                "numeroRue", "1",
-                "roles", List.of("COLLABORATEUR")
+                "numeroRue", "1"
         );
 
         mockMvc.perform(post("/auth/creer-compte")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                        .content(Objects.requireNonNull(objectMapper.writeValueAsString(request))))
                 .andExpect(status().isConflict());
     }
 
@@ -96,8 +94,8 @@ class AuthControllerTest {
         );
 
         mockMvc.perform(post("/auth/se-connecter")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                        .content(Objects.requireNonNull(objectMapper.writeValueAsString(request))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").isNotEmpty());
     }
@@ -111,8 +109,8 @@ class AuthControllerTest {
         );
 
         mockMvc.perform(post("/auth/se-connecter")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                        .content(Objects.requireNonNull(objectMapper.writeValueAsString(request))))
                 .andExpect(status().isUnauthorized());
     }
 }

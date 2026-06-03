@@ -1,4 +1,4 @@
-package gestiontransports.model;
+package gestiontransports.enums;
 
 public enum Role {
     COLLABORATEUR,

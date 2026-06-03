@@ -1,9 +1,9 @@
-package gestiontransports.dto;
+package gestiontransports.dto.securite;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-public class ConnexionRequest {
+public class ConnexionRequestDTO {
 
     @NotBlank
     @Email
