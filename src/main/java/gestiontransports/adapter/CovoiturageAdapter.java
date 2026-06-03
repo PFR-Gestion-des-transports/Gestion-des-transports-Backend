@@ -45,8 +45,6 @@ public class CovoiturageAdapter {
         covoiturage.setNbrPlaceInitial(request.getNbrPlaceInitial());
         covoiturage.setNbrPlaceRestante(request.getNbrPlaceInitial());
         covoiturage.setDateHeureDebut(request.getDateHeureDebut());
-        covoiturage.setAdresseDepart(AdresseAdapter.toModel(request.getAdresseDepart()));
-        covoiturage.setAdresseArrivee(AdresseAdapter.toModel(request.getAdresseArrivee()));
         return covoiturage;
     }
 

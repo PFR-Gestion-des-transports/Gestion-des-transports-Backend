@@ -3,11 +3,10 @@ package gestiontransports.service;
 import gestiontransports.adapter.CovoiturageAdapter;
 import gestiontransports.dto.covoiturage.CovoiturageDTO;
 import gestiontransports.dto.covoiturage.ModifierPlacesCovoiturageDTO;
-import gestiontransports.repository.UtilisateurRepository;
 import gestiontransports.model.Vehicule;
 import gestiontransports.enums.StatutCovoiturage;
 import gestiontransports.adapter.AdresseAdapter;
-import gestiontransports.dto.covoiturage.CreerCovoiturageRequest;   
+import gestiontransports.dto.covoiturage.CreerCovoiturageRequest;
 import gestiontransports.dto.covoiturage.ModifierCovoiturageDTO;
 import gestiontransports.repository.VehiculeRepository;
 import gestiontransports.security.SecurityUtils;
@@ -34,17 +33,17 @@ public class CovoiturageService {
 
     private final CovoiturageRepository covoiturageRepository;
     private final AdresseRepository adresseRepository;
-    private final UtilisateurRepository utilisateurRepository;
     private final VehiculeRepository vehiculeRepository;
+    private final UtilisateurContextService utilisateurContextService;
 
     public CovoiturageService(CovoiturageRepository covoiturageRepository,
                   AdresseRepository adresseRepository,
-                  UtilisateurRepository utilisateurRepository,
-                  VehiculeRepository vehiculeRepository) {
+                  VehiculeRepository vehiculeRepository,
+                  UtilisateurContextService utilisateurContextService) {
     this.covoiturageRepository = covoiturageRepository;
     this.adresseRepository = adresseRepository;
-    this.utilisateurRepository = utilisateurRepository;
     this.vehiculeRepository = vehiculeRepository;
+    this.utilisateurContextService = utilisateurContextService;
     }
 
     /**
@@ -84,8 +83,7 @@ public class CovoiturageService {
     @Transactional
     public CovoiturageDTO create(CreerCovoiturageRequest request) {
     
-        Utilisateur utilisateur = utilisateurRepository.findByEmail(SecurityUtils.currentEmail())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
+        Utilisateur utilisateur = utilisateurContextService.getCurrentUser();
         
         Covoiturage covoiturage = CovoiturageAdapter.toModel(request);
 

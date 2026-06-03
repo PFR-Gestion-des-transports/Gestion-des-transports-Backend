@@ -9,7 +9,6 @@ import gestiontransports.enums.Motorisation;
 import gestiontransports.enums.StatutVehicule;
 import gestiontransports.model.Utilisateur;
 import gestiontransports.model.Vehicule;
-import gestiontransports.repository.UtilisateurRepository;
 import gestiontransports.repository.VehiculeRepository;
 import gestiontransports.security.SecurityUtils;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -30,15 +29,15 @@ import java.util.List;
 public class VehiculeService {
 
     private final VehiculeRepository vehiculeRepository;
-    private final UtilisateurRepository utilisateurRepository;
     private final ReservationVehiculeService reservationVehiculeService;
+    private final UtilisateurContextService utilisateurContextService;
 
     public VehiculeService(VehiculeRepository vehiculeRepository,
-                           UtilisateurRepository utilisateurRepository,
-                           ReservationVehiculeService reservationVehiculeService) {
+                           ReservationVehiculeService reservationVehiculeService,
+                           UtilisateurContextService utilisateurContextService) {
         this.vehiculeRepository = vehiculeRepository;
-        this.utilisateurRepository = utilisateurRepository;
         this.reservationVehiculeService = reservationVehiculeService;
+        this.utilisateurContextService = utilisateurContextService;
     }
 
     /**
@@ -53,8 +52,7 @@ public class VehiculeService {
      */
     @Transactional
     public VehiculeDTO create(CreerVehiculeRequestDTO request, boolean estVehiculeService) {
-        Utilisateur utilisateur = utilisateurRepository.findByEmail(SecurityUtils.currentEmail())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
+        Utilisateur utilisateur = utilisateurContextService.getCurrentUser();
 
         if (vehiculeRepository.existsByImmatriculation(request.getImmatriculation())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Immatriculation déjà utilisée");
@@ -88,8 +86,7 @@ public class VehiculeService {
      * @return la liste des véhicules de service avec une réservation active chevauchant le créneau
      */
     public List<VehiculeDTO> findVehiculesServiceReservesParUtilisateur(LocalDateTime dateDebut, LocalDateTime dateFin) {
-        Utilisateur utilisateur = utilisateurRepository.findByEmail(SecurityUtils.currentEmail())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
+        Utilisateur utilisateur = utilisateurContextService.getCurrentUser();
         return reservationVehiculeService.findActivesByUtilisateurAndOverlap(utilisateur, dateDebut, dateFin)
                 .stream()
                 .map(r -> VehiculeAdapter.toDTO(r.getVehicule()))
@@ -103,8 +100,7 @@ public class VehiculeService {
      * @return la liste des véhicules personnels disponibles
      */
     public List<VehiculeDTO> findVehiculesDisponibles() {
-        Utilisateur utilisateur = utilisateurRepository.findByEmail(SecurityUtils.currentEmail())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
+        Utilisateur utilisateur = utilisateurContextService.getCurrentUser();
 
         return vehiculeRepository
                 .findByUtilisateurAndStatutVehiculeAndEstVehiculeService(utilisateur, StatutVehicule.EN_SERVICE, false)

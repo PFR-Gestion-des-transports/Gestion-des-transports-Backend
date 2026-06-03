@@ -34,13 +34,16 @@ public class ReservationVehiculeService {
     private final ReservationVehiculeRepository reservationVehiculeRepository;
     private final UtilisateurRepository utilisateurRepository;
     private final VehiculeRepository vehiculeRepository;
+    private final UtilisateurContextService utilisateurContextService;
 
     public ReservationVehiculeService(ReservationVehiculeRepository reservationVehiculeRepository,
                                       UtilisateurRepository utilisateurRepository,
-                                      VehiculeRepository vehiculeRepository) {
+                                      VehiculeRepository vehiculeRepository,
+                                      UtilisateurContextService utilisateurContextService) {
         this.reservationVehiculeRepository = reservationVehiculeRepository;
         this.utilisateurRepository = utilisateurRepository;
         this.vehiculeRepository = vehiculeRepository;
+        this.utilisateurContextService = utilisateurContextService;
     }
 
     /**
@@ -202,8 +205,7 @@ public class ReservationVehiculeService {
      */
     @Transactional
     public ReservationVehiculeDTO create(ReserverVehiculeServiceDTO request) {
-        Utilisateur utilisateur = utilisateurRepository.findByEmail(SecurityUtils.currentEmail())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
+        Utilisateur utilisateur = utilisateurContextService.getCurrentUser();
 
         Vehicule vehicule = vehiculeRepository.findById(request.getVehiculeId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
