@@ -12,6 +12,8 @@ import jakarta.validation.constraints.NotEmpty;
 
 public class CovoiturageDTO {
 
+    private int id;
+
     @NotNull
     private Integer nbrPlaceInitial;
 
@@ -25,6 +27,9 @@ public class CovoiturageDTO {
     @NotNull
     @Valid
     private AdresseDTO adresseArrivee;
+
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
     public Integer getNbrPlaceInitial() { return nbrPlaceInitial; }
     public void setNbrPlaceInitial(Integer nbrPlaceInitial) { this.nbrPlaceInitial = nbrPlaceInitial; }

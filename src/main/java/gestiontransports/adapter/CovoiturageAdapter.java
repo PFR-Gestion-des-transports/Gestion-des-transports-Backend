@@ -2,6 +2,7 @@ package gestiontransports.adapter;
 
 import gestiontransports.model.Covoiturage;
 import gestiontransports.dto.covoiturage.CovoiturageDTO;
+import gestiontransports.dto.covoiturage.CreerCovoiturageRequest;
 
 public class CovoiturageAdapter {
     public static CovoiturageDTO toDTO(Covoiturage covoiturage) {
@@ -21,4 +22,15 @@ public class CovoiturageAdapter {
         covoiturage.setAdresseArrivee(AdresseAdapter.toModel(dto.getAdresseArrivee()));
         return covoiturage;
     }
+
+    public static Covoiturage toModel(CreerCovoiturageRequest request) {
+        Covoiturage covoiturage = new Covoiturage();
+        covoiturage.setNbrPlaceInitial(request.getNbrPlaceInitial());
+        covoiturage.setDateHeureDebut(request.getDateHeureDebut());
+        covoiturage.setAdresseDepart(AdresseAdapter.toModel(request.getAdresseDepart()));
+        covoiturage.setAdresseArrivee(AdresseAdapter.toModel(request.getAdresseArrivee()));
+        return covoiturage;
+    }
+
+
 }
