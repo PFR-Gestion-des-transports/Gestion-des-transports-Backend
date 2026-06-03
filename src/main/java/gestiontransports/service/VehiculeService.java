@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -24,11 +25,14 @@ public class VehiculeService {
 
     private final VehiculeRepository vehiculeRepository;
     private final UtilisateurRepository utilisateurRepository;
+    private final ReservationVehiculeService reservationVehiculeService;
 
     public VehiculeService(VehiculeRepository vehiculeRepository,
-                           UtilisateurRepository utilisateurRepository) {
+                           UtilisateurRepository utilisateurRepository,
+                           ReservationVehiculeService reservationVehiculeService) {
         this.vehiculeRepository = vehiculeRepository;
         this.utilisateurRepository = utilisateurRepository;
+        this.reservationVehiculeService = reservationVehiculeService;
     }
 
     @Transactional
@@ -54,6 +58,15 @@ public class VehiculeService {
         vehicule.setUtilisateur(utilisateur);
 
         return VehiculeAdapter.toDTO(vehiculeRepository.save(vehicule));
+    }
+
+    public List<VehiculeDTO> findVehiculesServiceReservesParUtilisateur(LocalDateTime dateDebut, LocalDateTime dateFin) {
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(SecurityUtils.currentEmail())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
+        return reservationVehiculeService.findActivesByUtilisateurAndOverlap(utilisateur, dateDebut, dateFin)
+                .stream()
+                .map(r -> VehiculeAdapter.toDTO(r.getVehicule()))
+                .toList();
     }
 
     public List<VehiculeDTO> findVehiculesDisponibles() {

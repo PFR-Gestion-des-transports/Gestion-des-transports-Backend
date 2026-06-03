@@ -4,6 +4,8 @@ import gestiontransports.enums.Categorie;
 import gestiontransports.enums.Motorisation;
 import gestiontransports.enums.StatutVehicule;
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Vehicule")
@@ -88,4 +90,10 @@ public class Vehicule {
 
     public Utilisateur getUtilisateur() { return utilisateur; }
     public void setUtilisateur(Utilisateur utilisateur) { this.utilisateur = utilisateur; }
+
+    @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReservationVehicule> reservations = new ArrayList<>();
+
+    public List<ReservationVehicule> getReservations() { return reservations; }
+    public void setReservations(List<ReservationVehicule> reservations) { this.reservations = reservations; }
 }
