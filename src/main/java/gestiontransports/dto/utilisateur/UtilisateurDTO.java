@@ -4,6 +4,10 @@ import gestiontransports.dto.adresse.AdresseOutputDTO;
 import gestiontransports.enums.Role;
 import java.util.Set;
 
+/**
+ * DTO de sortie représentant un utilisateur exposé dans les réponses de l'API,
+ * sans le mot de passe ni les informations sensibles.
+ */
 public class UtilisateurDTO {
 
     private int id;
@@ -11,6 +15,7 @@ public class UtilisateurDTO {
     private String nom;
     private String email;
     private AdresseOutputDTO adresse;
+    /** Ensemble des rôles accordés à l'utilisateur (ex. ROLE_USER, ROLE_ADMIN). */
     private Set<Role> roles;
 
     public int getId() { return id; }

@@ -15,6 +15,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * Filtre HTTP exécuté une seule fois par requête, chargé d'intercepter le token JWT
+ * présent dans l'en-tête {@code Authorization}, de vérifier sa validité et son absence
+ * de la liste noire, puis d'alimenter le {@link SecurityContextHolder} avec l'authentification
+ * de l'utilisateur concerné.
+ */
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 

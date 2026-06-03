@@ -6,9 +6,13 @@ import gestiontransports.dto.adresse.AdresseInputDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * DTO d'entrée pour la création d'un covoiturage, reçu via POST /covoiturages.
+ */
 public class CreerCovoiturageRequest {
 
     @NotNull
+    /** Nombre de places proposées lors de la création du covoiturage. */
     private Integer nbrPlaceInitial;
 
     @NotNull
@@ -23,6 +27,7 @@ public class CreerCovoiturageRequest {
     private AdresseInputDTO adresseArrivee;
 
     @NotNull
+    /** Identifiant du véhicule à associer au covoiturage. */
     private Integer vehiculeId;
 
     public Integer getNbrPlaceInitial() { return nbrPlaceInitial; }

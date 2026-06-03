@@ -9,6 +9,12 @@ import java.util.List;
 
 import jakarta.persistence.*;
 
+/**
+ * Entité représentant un véhicule utilisable pour les covoiturages d'entreprise.
+ * Un véhicule peut être personnel ou de service, et est caractérisé par son immatriculation,
+ * sa marque, son modèle, sa motorisation, sa catégorie, son nombre de places et son statut
+ * de disponibilité.
+ */
 @Entity
 @Table(name = "Vehicule")
 public class Vehicule {

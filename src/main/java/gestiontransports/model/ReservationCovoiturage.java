@@ -8,6 +8,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 
+/**
+ * Entité de liaison représentant la réservation d'une place dans un covoiturage par un utilisateur passager.
+ * Elle établit la relation many-to-many entre {@link Utilisateur} et {@link Covoiturage}.
+ */
 @Entity
 @Table(name = "ReservationCovoiturage")
 public class ReservationCovoiturage {
