@@ -3,6 +3,10 @@ package gestiontransports.model;
 import gestiontransports.enums.Categorie;
 import gestiontransports.enums.Motorisation;
 import gestiontransports.enums.StatutVehicule;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -51,6 +55,9 @@ public class Vehicule {
     @JoinColumn(name = "utilisateur_id", nullable = false)
     private Utilisateur utilisateur;
 
+    @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Covoiturage> covoiturages = new ArrayList<>();
+
     public Vehicule() {}
 
     public Integer getId() { return id; }
@@ -88,4 +95,7 @@ public class Vehicule {
 
     public Utilisateur getUtilisateur() { return utilisateur; }
     public void setUtilisateur(Utilisateur utilisateur) { this.utilisateur = utilisateur; }
+
+    public List<Covoiturage> getCovoiturages() { return covoiturages; }
+    public void setCovoiturages(List<Covoiturage> covoiturages) { this.covoiturages = covoiturages; }
 }

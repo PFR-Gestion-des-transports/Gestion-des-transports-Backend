@@ -42,6 +42,11 @@ public class Covoiturage {
     @Column(name = "Statut", nullable = false, length = 50)
     private StatutCovoiturage statut;
 
+    @ManyToOne
+    @JoinColumn(name = "vehicule", nullable = false)
+    private Vehicule vehicule;
+
+
 
     public Covoiturage() {}
 
@@ -71,4 +76,7 @@ public class Covoiturage {
 
     public StatutCovoiturage getStatut() { return statut; }
     public void setStatut(StatutCovoiturage statut) { this.statut = statut; }
+
+    public Vehicule getVehicule() { return vehicule; }
+    public void setVehicule(Vehicule vehicule) { this.vehicule = vehicule; }
 }
