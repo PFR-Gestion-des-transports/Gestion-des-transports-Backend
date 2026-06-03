@@ -2,6 +2,11 @@ package gestiontransports.model;
 
 import jakarta.persistence.*;
 
+/**
+ * Entité représentant une adresse physique composée d'une ville, d'une rue et d'un numéro de rue.
+ * Cette entité est partagée entre les utilisateurs (adresse personnelle) et les covoiturages
+ * (adresses de départ et d'arrivée).
+ */
 @Entity
 @Table(name = "Adresse")
 public class Adresse {

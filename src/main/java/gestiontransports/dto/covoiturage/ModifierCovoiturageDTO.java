@@ -7,12 +7,17 @@ import gestiontransports.enums.StatutCovoiturage;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * DTO d'entrée pour la modification complète d'un covoiturage existant, reçu via PUT /covoiturages/{id}.
+ */
 public class ModifierCovoiturageDTO {
-    
+
     @NotNull
+    /** Nombre de places initial du covoiturage (capacité totale). */
     private Integer nbrPlaceInitial;
 
     @NotNull
+    /** Nombre de places encore disponibles à la réservation. */
     private Integer nbrPlaceRestante;
 
     @NotNull

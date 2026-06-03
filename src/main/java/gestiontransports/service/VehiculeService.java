@@ -20,6 +20,11 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Service gérant les opérations CRUD sur les véhicules, qu'ils soient personnels ou de service.
+ * La distinction entre véhicule personnel et de service est portée par le flag {@code estVehiculeService},
+ * et les accès en lecture/modification sont restreints au propriétaire ou à un administrateur.
+ */
 @Service
 public class VehiculeService {
 
@@ -35,6 +40,16 @@ public class VehiculeService {
         this.reservationVehiculeService = reservationVehiculeService;
     }
 
+    /**
+     * Enregistre un nouveau véhicule associé à l'utilisateur authentifié.
+     * Si la motorisation est électrique, l'émission de CO₂ au kilomètre est automatiquement fixée à 0.
+     * La création d'un véhicule de service (flag {@code estVehiculeService = true}) est réservée aux administrateurs.
+     *
+     * @param request         les informations du véhicule à créer (immatriculation, marque, modèle, motorisation, etc.)
+     * @param estVehiculeService {@code true} pour un véhicule appartenant à la flotte de service, {@code false} pour un véhicule personnel
+     * @return le DTO du véhicule nouvellement créé
+     * @throws org.springframework.web.server.ResponseStatusException 409 si l'immatriculation est déjà enregistrée
+     */
     @Transactional
     public VehiculeDTO create(CreerVehiculeRequestDTO request, boolean estVehiculeService) {
         Utilisateur utilisateur = utilisateurRepository.findByEmail(SecurityUtils.currentEmail())
@@ -60,6 +75,13 @@ public class VehiculeService {
         return VehiculeAdapter.toDTO(vehiculeRepository.save(vehicule));
     }
 
+    /**
+     * Retourne les véhicules de service réservés par l'utilisateur connecté sur un créneau donné.
+     *
+     * @param dateDebut début du créneau à vérifier
+     * @param dateFin   fin du créneau à vérifier
+     * @return la liste des véhicules de service avec une réservation active chevauchant le créneau
+     */
     public List<VehiculeDTO> findVehiculesServiceReservesParUtilisateur(LocalDateTime dateDebut, LocalDateTime dateFin) {
         Utilisateur utilisateur = utilisateurRepository.findByEmail(SecurityUtils.currentEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
@@ -69,6 +91,12 @@ public class VehiculeService {
                 .toList();
     }
 
+    /**
+     * Retourne les véhicules personnels EN_SERVICE appartenant à l'utilisateur connecté,
+     * disponibles pour être associés à un covoiturage.
+     *
+     * @return la liste des véhicules personnels disponibles
+     */
     public List<VehiculeDTO> findVehiculesDisponibles() {
         Utilisateur utilisateur = utilisateurRepository.findByEmail(SecurityUtils.currentEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
@@ -80,6 +108,15 @@ public class VehiculeService {
                 .toList();
     }
 
+    /**
+     * Retourne le détail d'un véhicule identifié par son identifiant.
+     * L'accès est autorisé uniquement si l'appelant est administrateur ou s'il est le propriétaire du véhicule.
+     *
+     * @param id l'identifiant du véhicule recherché
+     * @return le DTO du véhicule trouvé
+     * @throws org.springframework.web.server.ResponseStatusException 404 si le véhicule n'existe pas,
+     *         403 si l'appelant n'est pas autorisé à consulter ce véhicule
+     */
     public VehiculeDTO findById(int id) {
         Vehicule vehicule = vehiculeRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
@@ -91,6 +128,17 @@ public class VehiculeService {
         return VehiculeAdapter.toDTO(vehicule);
     }
 
+    /**
+     * Met à jour les informations d'un véhicule existant.
+     * Si la motorisation est modifiée en électrique, le CO₂ au kilomètre est automatiquement remis à 0.
+     * L'accès est autorisé uniquement si l'appelant est administrateur ou s'il est le propriétaire du véhicule.
+     *
+     * @param id      l'identifiant du véhicule à modifier
+     * @param request les nouvelles données du véhicule
+     * @return le DTO mis à jour du véhicule
+     * @throws org.springframework.web.server.ResponseStatusException 404 si le véhicule est introuvable,
+     *         403 si l'appelant n'est pas autorisé, 409 si la nouvelle immatriculation est déjà utilisée par un autre véhicule
+     */
     @Transactional
     public VehiculeDTO update(int id, ModifierVehiculeRequestDTO request) {
         Vehicule vehicule = vehiculeRepository.findById(id)
@@ -118,6 +166,16 @@ public class VehiculeService {
         return VehiculeAdapter.toDTO(vehiculeRepository.save(vehicule));
     }
 
+    /**
+     * Modifie uniquement le statut d'un véhicule (par exemple passage de {@code EN_SERVICE} à {@code HORS_SERVICE}).
+     * L'accès est autorisé uniquement si l'appelant est administrateur ou s'il est le propriétaire du véhicule.
+     *
+     * @param id      l'identifiant du véhicule dont le statut doit être modifié
+     * @param request le nouveau statut à appliquer
+     * @return le DTO du véhicule avec le statut mis à jour
+     * @throws org.springframework.web.server.ResponseStatusException 404 si le véhicule est introuvable,
+     *         403 si l'appelant n'est pas autorisé à modifier ce véhicule
+     */
     public VehiculeDTO modifierStatut(int id, ModifierStatutVehiculeRequestDTO request) {
         Vehicule vehicule = vehiculeRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
@@ -131,6 +189,14 @@ public class VehiculeService {
         return VehiculeAdapter.toDTO(vehiculeRepository.save(vehicule));
     }
 
+    /**
+     * Supprime définitivement un véhicule.
+     * La suppression est autorisée uniquement si l'appelant est administrateur ou s'il est le propriétaire du véhicule.
+     *
+     * @param id l'identifiant du véhicule à supprimer
+     * @throws org.springframework.web.server.ResponseStatusException 404 si le véhicule est introuvable,
+     *         403 si l'appelant n'est pas autorisé à supprimer ce véhicule
+     */
     public void delete(int id) {
         Vehicule vehicule = vehiculeRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));

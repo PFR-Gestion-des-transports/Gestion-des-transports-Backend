@@ -6,6 +6,11 @@ import gestiontransports.enums.StatutReservation;
 
 import java.time.LocalDateTime;
 
+/**
+ * DTO de sortie représentant une réservation de véhicule de service.
+ * Expose l'ensemble des informations d'une réservation (plage horaire, statut, collaborateur
+ * et véhicule associés) pour les réponses de l'API REST.
+ */
 public class ReservationVehiculeDTO {
 
     private int id;

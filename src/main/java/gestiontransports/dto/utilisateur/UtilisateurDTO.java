@@ -2,6 +2,10 @@ package gestiontransports.dto.utilisateur;
 
 import gestiontransports.dto.adresse.AdresseOutputDTO;
 
+/**
+ * DTO de sortie représentant un utilisateur exposé dans les réponses de l'API,
+ * sans le mot de passe ni les informations sensibles.
+ */
 public class UtilisateurDTO {
 
     private int id;

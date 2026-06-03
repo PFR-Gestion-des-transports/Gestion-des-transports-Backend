@@ -8,6 +8,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Entité représentant un collaborateur de l'entreprise, qui peut être passager, conducteur
+ * ou administrateur. Chaque utilisateur possède une adresse, un ensemble de rôles, et peut
+ * être associé à des réservations, des covoiturages créés et des véhicules déclarés.
+ */
 @Entity
 @Table(name = "Utilisateur")
 public class Utilisateur {

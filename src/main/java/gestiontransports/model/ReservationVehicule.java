@@ -4,6 +4,11 @@ import gestiontransports.enums.StatutReservation;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Entité JPA représentant la réservation d'un véhicule de service par un collaborateur.
+ * Une réservation couvre une plage horaire (minimum 1 jour, maximum 1 semaine) et évolue
+ * à travers les statuts définis par {@link gestiontransports.enums.StatutReservation}.
+ */
 @Entity
 @Table(name = "ReservationVehicule")
 public class ReservationVehicule {
