@@ -2,6 +2,7 @@ package gestiontransports.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import gestiontransports.enums.Role;
+import gestiontransports.interfaces.OwnedByUtilisateur;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,7 +16,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "Utilisateur")
-public class Utilisateur {
+public class Utilisateur implements OwnedByUtilisateur {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,6 +59,9 @@ public class Utilisateur {
     private Set<Role> roles = new HashSet<>();
 
     public Utilisateur() {}
+
+    @Override
+    public Utilisateur getUtilisateur() { return this; }
 
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }

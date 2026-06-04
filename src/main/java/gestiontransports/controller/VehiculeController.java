@@ -121,8 +121,8 @@ public class VehiculeController {
      * @return une réponse HTTP 204 sans contenu
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable int id) {
-        vehiculeService.delete(id);
+    public ResponseEntity<Void> deleteById(@PathVariable int id) {
+        vehiculeService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

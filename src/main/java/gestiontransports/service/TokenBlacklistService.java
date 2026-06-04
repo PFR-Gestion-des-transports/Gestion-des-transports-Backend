@@ -43,6 +43,9 @@ public class TokenBlacklistService {
      * @return {@code true} si le token est révoqué, {@code false} sinon
      */
     public boolean estRevoque(String jti) {
+        if (jti == null) {
+            return false;
+        }
         return tokenBlacklistRepository.existsById(jti);
     }
 

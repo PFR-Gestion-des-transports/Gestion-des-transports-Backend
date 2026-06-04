@@ -3,13 +3,12 @@ package gestiontransports.model;
 import gestiontransports.enums.Categorie;
 import gestiontransports.enums.Motorisation;
 import gestiontransports.enums.StatutVehicule;
+import gestiontransports.interfaces.OwnedByUtilisateur;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Entité représentant un véhicule utilisable pour les covoiturages d'entreprise.
@@ -19,7 +18,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "Vehicule")
-public class Vehicule {
+public class Vehicule implements OwnedByUtilisateur {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -104,6 +103,7 @@ public class Vehicule {
     public StatutVehicule getStatutVehicule() { return statutVehicule; }
     public void setStatutVehicule(StatutVehicule statutVehicule) { this.statutVehicule = statutVehicule; }
 
+    @Override
     public Utilisateur getUtilisateur() { return utilisateur; }
     public void setUtilisateur(Utilisateur utilisateur) { this.utilisateur = utilisateur; }
 
