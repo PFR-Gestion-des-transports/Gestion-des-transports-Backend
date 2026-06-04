@@ -30,7 +30,7 @@ public class CovoiturageController {
      *
      * @return une réponse HTTP 200 contenant la liste des covoiturages
      */
-    @GetMapping
+    @GetMapping("/findall")
     public ResponseEntity<List<CovoiturageDTO>> findAll() {
         return ResponseEntity.ok(covoiturageService.findAll());
     }
@@ -52,7 +52,7 @@ public class CovoiturageController {
      * @param request les données du covoiturage à créer (départ, arrivée, date, places, etc.)
      * @return une réponse HTTP 201 contenant le covoiturage nouvellement créé
      */
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<CovoiturageDTO> create(@Valid @RequestBody CreerCovoiturageRequest request) {
         return ResponseEntity.status(201).body(covoiturageService.create(request));
     }
