@@ -12,6 +12,7 @@ import gestiontransports.aop.RequiresAdminOrSelf;
 import gestiontransports.repository.ReservationVehiculeRepository;
 import gestiontransports.repository.VehiculeRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -197,5 +198,22 @@ public class ReservationVehiculeService {
         validerDatesEtDisponibilite(vehicule, request.getDateHeureDebut(), request.getDateHeureFin(), null);
 
         return ReservationVehiculeAdapter.toDTO(reservationVehiculeRepository.save(ReservationVehiculeAdapter.toModel(request, utilisateur, vehicule)));
+    }
+
+    /**
+     * Tâche planifiée exécutée toutes les 30 minutes qui fait évoluer les statuts des réservations :
+     * d'abord {@code PAS_COMMENCEE → COMMENCEE} pour les réservations dont la date de début est échue,
+     * puis {@code COMMENCEE → TERMINEE} pour celles dont la date de fin est échue.
+     * L'ordre est garanti : une réservation dont les deux dates sont passées atteint {@code TERMINEE}
+     * en un seul tick.
+     */
+    @Scheduled(cron = "0 0/30 * * * *")
+    @Transactional
+    public void mettreAJourStatutsReservations() {
+        LocalDateTime maintenant = LocalDateTime.now();
+        reservationVehiculeRepository.demarrerReservationsEchues(
+                maintenant, StatutReservation.PAS_COMMENCEE, StatutReservation.COMMENCEE);
+        reservationVehiculeRepository.terminerReservationsEchues(
+                maintenant, StatutReservation.COMMENCEE, StatutReservation.TERMINEE);
     }
 }

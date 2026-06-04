@@ -7,7 +7,11 @@ import gestiontransports.model.Vehicule;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -39,4 +43,36 @@ public interface ReservationVehiculeRepository extends JpaRepository<Reservation
      * @return la liste des réservations correspondantes
      */
     List<ReservationVehicule> findByUtilisateurAndStatutReservationIn(Utilisateur utilisateur, List<StatutReservation> statuts);
+
+    /**
+     * Passe toutes les réservations dont le statut correspond à {@code source} et dont la date de
+     * début est passée au statut {@code cible}. Destinée à être appelée par un scheduler.
+     *
+     * @param now    la date et heure de référence
+     * @param source le statut source (PAS_COMMENCEE)
+     * @param cible  le statut cible (COMMENCEE)
+     * @return le nombre de réservations mises à jour
+     */
+    @Modifying
+    @Query("UPDATE ReservationVehicule r SET r.statutReservation = :cible " +
+           "WHERE r.statutReservation = :source AND r.dateHeureDebut <= :now")
+    int demarrerReservationsEchues(@Param("now") LocalDateTime now,
+                                   @Param("source") StatutReservation source,
+                                   @Param("cible") StatutReservation cible);
+
+    /**
+     * Passe toutes les réservations dont le statut correspond à {@code source} et dont la date de
+     * fin est passée au statut {@code cible}. Destinée à être appelée par un scheduler.
+     *
+     * @param now    la date et heure de référence
+     * @param source le statut source (COMMENCEE)
+     * @param cible  le statut cible (TERMINEE)
+     * @return le nombre de réservations mises à jour
+     */
+    @Modifying
+    @Query("UPDATE ReservationVehicule r SET r.statutReservation = :cible " +
+           "WHERE r.statutReservation = :source AND r.dateHeureFin <= :now")
+    int terminerReservationsEchues(@Param("now") LocalDateTime now,
+                                   @Param("source") StatutReservation source,
+                                   @Param("cible") StatutReservation cible);
 }
