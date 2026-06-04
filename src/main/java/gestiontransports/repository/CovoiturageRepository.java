@@ -1,5 +1,8 @@
 package gestiontransports.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import gestiontransports.model.Covoiturage;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,6 +15,11 @@ import java.util.List;
  */
 public interface CovoiturageRepository extends JpaRepository<Covoiturage, Integer> {
 
+    @Query("SELECT COUNT(c) > 0 FROM Covoiturage c WHERE c.vehicule.id = :vehiculeId AND c.dateHeureDebut = :dateHeureDebut")
+    boolean existsByVehiculeAndDatesOverlapping(
+        @Param("vehiculeId") Integer vehiculeId, 
+        @Param("dateHeureDebut") LocalDateTime dateHeureDebut
+    );    
     /**
      * Retourne tous les covoiturages partant d'une adresse donnée.
      *
@@ -35,5 +43,4 @@ public interface CovoiturageRepository extends JpaRepository<Covoiturage, Intege
      * @return la liste des covoiturages correspondants, vide si aucun résultat
      */
     List<Covoiturage> findByDateHeureDebut(LocalDateTime dateHeureDebut);
-
 }
