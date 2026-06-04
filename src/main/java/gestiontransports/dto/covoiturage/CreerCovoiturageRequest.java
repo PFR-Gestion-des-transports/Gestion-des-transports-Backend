@@ -3,16 +3,18 @@ package gestiontransports.dto.covoiturage;
 import java.time.LocalDateTime;
 
 import gestiontransports.dto.adresse.AdresseInputDTO;
-import gestiontransports.dto.vehicule.VehiculeDTO;
-
-import gestiontransports.enums.StatutCovoiturage;
-
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * DTO d'entrée pour la création d'un covoiturage, reçu via POST /covoiturages.
+ */
 public class CreerCovoiturageRequest {
 
     @NotNull
+    @Min(1)
+    /** Nombre de places proposées lors de la création du covoiturage. */
     private Integer nbrPlaceInitial;
 
     @NotNull
@@ -27,7 +29,8 @@ public class CreerCovoiturageRequest {
     private AdresseInputDTO adresseArrivee;
 
     @NotNull
-    private int vehiculeId;
+    /** Identifiant du véhicule à associer au covoiturage. */
+    private Integer vehiculeId;
 
     public Integer getNbrPlaceInitial() { return nbrPlaceInitial; }
     public void setNbrPlaceInitial(Integer nbrPlaceInitial) { this.nbrPlaceInitial = nbrPlaceInitial; }
@@ -41,6 +44,6 @@ public class CreerCovoiturageRequest {
     public AdresseInputDTO getAdresseArrivee() { return adresseArrivee; }
     public void setAdresseArrivee(AdresseInputDTO adresseArrivee) { this.adresseArrivee = adresseArrivee; }
 
-    public int getVehiculeId() { return vehiculeId; }
-    public void setVehiculeId(int vehiculeId) { this.vehiculeId = vehiculeId; }
+    public Integer getVehiculeId() { return vehiculeId; }
+    public void setVehiculeId(Integer vehiculeId) { this.vehiculeId = vehiculeId; }
 }

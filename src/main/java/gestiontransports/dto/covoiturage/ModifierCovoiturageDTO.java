@@ -5,15 +5,18 @@ import java.time.LocalDateTime;
 import gestiontransports.dto.adresse.AdresseInputDTO;
 import gestiontransports.enums.StatutCovoiturage;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * DTO d'entrée pour la modification complète d'un covoiturage existant, reçu via PUT /covoiturages/{id}.
+ */
 public class ModifierCovoiturageDTO {
-    
-    @NotNull
-    private Integer nbrPlaceInitial;
 
     @NotNull
-    private Integer nbrPlaceRestante;
+    @Min(1)
+    /** Nombre de places initial du covoiturage (capacité totale). */
+    private Integer nbrPlaceInitial;
 
     @NotNull
     private LocalDateTime dateHeureDebut;
@@ -27,16 +30,13 @@ public class ModifierCovoiturageDTO {
     private AdresseInputDTO adresseArrivee;
 
     @NotNull
-    private int vehiculeId;
+    private Integer vehiculeId;
 
     @NotNull
     private StatutCovoiturage statut;
 
     public Integer getNbrPlaceInitial() { return nbrPlaceInitial; }
     public void setNbrPlaceInitial(Integer nbrPlaceInitial) { this.nbrPlaceInitial = nbrPlaceInitial; }
-
-    public Integer getNbrPlaceRestante() { return nbrPlaceRestante; }
-    public void setNbrPlaceRestante(Integer nbrPlaceRestante) { this.nbrPlaceRestante = nbrPlaceRestante; }
 
     public LocalDateTime getDateHeureDebut() { return dateHeureDebut; }
     public void setDateHeureDebut(LocalDateTime dateHeureDebut) { this.dateHeureDebut = dateHeureDebut; }
@@ -47,8 +47,8 @@ public class ModifierCovoiturageDTO {
     public AdresseInputDTO getAdresseArrivee() { return adresseArrivee; }
     public void setAdresseArrivee(AdresseInputDTO adresseArrivee) { this.adresseArrivee = adresseArrivee; }
 
-    public int getVehiculeId() { return vehiculeId; }
-    public void setVehiculeId(int vehiculeId) { this.vehiculeId = vehiculeId; }
+    public Integer getVehiculeId() { return vehiculeId; }
+    public void setVehiculeId(Integer vehiculeId) { this.vehiculeId = vehiculeId; }
 
     public StatutCovoiturage getStatut() { return statut; }
     public void setStatut(StatutCovoiturage statut) { this.statut = statut; }

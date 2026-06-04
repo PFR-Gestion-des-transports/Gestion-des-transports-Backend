@@ -3,6 +3,10 @@ package gestiontransports.dto.reservation;
 import gestiontransports.dto.covoiturage.CovoiturageDTO;
 import gestiontransports.dto.utilisateur.UtilisateurDTO;
 
+/**
+ * DTO de sortie représentant une réservation de covoiturage, retourné par les endpoints
+ * de consultation et de création de réservation.
+ */
 public class ReservationCovoiturageDTO {
 
     private int id;

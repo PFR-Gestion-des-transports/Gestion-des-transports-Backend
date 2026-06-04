@@ -8,7 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * Entité représentant un véhicule utilisable pour les covoiturages d'entreprise.
+ * Un véhicule peut être personnel ou de service, et est caractérisé par son immatriculation,
+ * sa marque, son modèle, sa motorisation, sa catégorie, son nombre de places et son statut
+ * de disponibilité.
+ */
 @Entity
 @Table(name = "Vehicule")
 public class Vehicule {
@@ -55,8 +63,11 @@ public class Vehicule {
     @JoinColumn(name = "utilisateur_id", nullable = false)
     private Utilisateur utilisateur;
 
-    @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "vehicule")
     private List<Covoiturage> covoiturages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReservationVehicule> reservations = new ArrayList<>();
 
     public Vehicule() {}
 
@@ -96,6 +107,9 @@ public class Vehicule {
     public Utilisateur getUtilisateur() { return utilisateur; }
     public void setUtilisateur(Utilisateur utilisateur) { this.utilisateur = utilisateur; }
 
+    public List<ReservationVehicule> getReservations() { return reservations; }
+    public void setReservations(List<ReservationVehicule> reservations) { this.reservations = reservations; }
+    
     public List<Covoiturage> getCovoiturages() { return covoiturages; }
     public void setCovoiturages(List<Covoiturage> covoiturages) { this.covoiturages = covoiturages; }
 }

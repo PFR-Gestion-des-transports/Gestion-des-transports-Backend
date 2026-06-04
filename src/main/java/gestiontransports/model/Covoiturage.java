@@ -6,6 +6,12 @@ import gestiontransports.enums.StatutCovoiturage;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
 
+/**
+ * Entité représentant un trajet de covoiturage d'entreprise, avec ses adresses de départ et
+ * d'arrivée, ses places disponibles, sa date de départ, le conducteur et le véhicule utilisé.
+ * Un covoiturage peut avoir plusieurs réservations et évolue à travers différents statuts
+ * (ex. : OUVERT, EN_COURS, TERMINE, ANNULE).
+ */
 @Entity
 @Table(name = "Covoiturage")
 public class Covoiturage {

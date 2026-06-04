@@ -4,19 +4,26 @@ import gestiontransports.enums.Categorie;
 import gestiontransports.enums.Motorisation;
 import gestiontransports.enums.StatutVehicule;
 
+/**
+ * DTO de sortie représentant un véhicule exposé dans les réponses de l'API.
+ */
 public class VehiculeDTO {
 
     private Integer id;
     private String immatriculation;
     private String marque;
     private String modele;
+    /** URL de la photo du véhicule. */
     private String urlPhoto;
+    /** Émissions de CO2 en grammes par kilomètre. */
     private double co2Km;
     private int nombreDePlace;
     private Categorie categorie;
     private Motorisation motorisation;
+    /** Indique si le véhicule est un véhicule de service (true) ou personnel (false). */
     private boolean estVehiculeService;
     private StatutVehicule statutVehicule;
+    /** Identifiant de l'utilisateur propriétaire du véhicule, null si véhicule de service. */
     private Integer utilisateurId;
 
     public Integer getId() { return id; }

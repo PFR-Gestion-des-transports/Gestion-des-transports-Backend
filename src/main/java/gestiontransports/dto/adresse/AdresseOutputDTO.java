@@ -1,5 +1,9 @@
 package gestiontransports.dto.adresse;
 
+/**
+ * DTO de sortie représentant une adresse exposée dans les réponses de l'API
+ * (profil utilisateur, détail d'un covoiturage).
+ */
 public class AdresseOutputDTO {
 
     private int id;

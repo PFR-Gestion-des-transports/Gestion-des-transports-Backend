@@ -9,6 +9,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
 
+/**
+ * DTO d'entrée pour la modification complète d'un véhicule existant,
+ * reçu via PUT /vehicules/{id}.
+ */
 public class ModifierVehiculeRequestDTO {
 
     @NotBlank
@@ -21,9 +25,11 @@ public class ModifierVehiculeRequestDTO {
     private String modele;
 
     @NotBlank
+    /** URL de la photo du véhicule. */
     private String urlPhoto;
 
     @PositiveOrZero
+    /** Émissions de CO2 en grammes par kilomètre. */
     private double co2Km;
 
     @NotNull
@@ -35,9 +41,6 @@ public class ModifierVehiculeRequestDTO {
 
     @NotNull
     private Motorisation motorisation;
-
-    @NotNull
-    private Boolean estVehiculeService;
 
     @NotNull
     private StatutVehicule statutVehicule;
@@ -65,9 +68,6 @@ public class ModifierVehiculeRequestDTO {
 
     public Motorisation getMotorisation() { return motorisation; }
     public void setMotorisation(Motorisation motorisation) { this.motorisation = motorisation; }
-
-    public Boolean getEstVehiculeService() { return estVehiculeService; }
-    public void setEstVehiculeService(Boolean estVehiculeService) { this.estVehiculeService = estVehiculeService; }
 
     public StatutVehicule getStatutVehicule() { return statutVehicule; }
     public void setStatutVehicule(StatutVehicule statutVehicule) { this.statutVehicule = statutVehicule; }

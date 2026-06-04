@@ -9,6 +9,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
 
+/**
+ * DTO d'entrée contenant les données nécessaires à la création d'un véhicule,
+ * reçu via POST /vehicules.
+ */
 public class CreerVehiculeRequestDTO {
 
     @NotBlank
@@ -21,9 +25,11 @@ public class CreerVehiculeRequestDTO {
     private String modele;
 
     @NotBlank
+    /** URL de la photo du véhicule. */
     private String urlPhoto;
 
     @PositiveOrZero
+    /** Émissions de CO2 en grammes par kilomètre. */
     private double co2Km;
 
     @NotNull

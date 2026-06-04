@@ -2,6 +2,10 @@ package gestiontransports.dto.adresse;
 
 import jakarta.validation.constraints.NotBlank;
 
+/**
+ * DTO d'entrée représentant une adresse, utilisé lors de la création ou de la modification
+ * d'une ressource nécessitant une adresse (covoiturage, profil utilisateur).
+ */
 public class AdresseInputDTO {
 
     @NotBlank
