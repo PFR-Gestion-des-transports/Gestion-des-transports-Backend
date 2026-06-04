@@ -7,8 +7,8 @@ import gestiontransports.dto.utilisateur.UtilisateurDTO;
 import gestiontransports.model.Adresse;
 import gestiontransports.model.Utilisateur;
 import gestiontransports.repository.AdresseRepository;
+import gestiontransports.aop.RequiresAdminOrSelf;
 import gestiontransports.repository.UtilisateurRepository;
-import gestiontransports.security.SecurityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,14 +55,10 @@ public class UtilisateurService {
      * @throws org.springframework.web.server.ResponseStatusException 404 si l'utilisateur n'existe pas,
      *         403 si l'appelant n'est pas autorisé à consulter ce profil
      */
+    @RequiresAdminOrSelf
     public UtilisateurDTO findById(int id) {
         Utilisateur utilisateur = utilisateurRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
-
-        if (!SecurityUtils.isUserAuthorizedAdminAndSelf(utilisateur)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès interdit");
-        }
-
         return UtilisateurAdapter.toDTO(utilisateur);
     }
 
@@ -77,14 +73,11 @@ public class UtilisateurService {
      * @throws org.springframework.web.server.ResponseStatusException 404 si l'utilisateur n'existe pas,
      *         403 si l'appelant n'est pas autorisé à modifier ce profil
      */
+    @RequiresAdminOrSelf
     @Transactional
     public UtilisateurDTO update(int id, ModifierUtilisateurRequestDTO request) {
         Utilisateur utilisateur = utilisateurRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
-
-        if (!SecurityUtils.isUserAuthorizedAdminAndSelf(utilisateur)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès interdit");
-        }
 
         utilisateur.setPrenom(request.getPrenom());
         utilisateur.setNom(request.getNom());
@@ -111,14 +104,9 @@ public class UtilisateurService {
      * @throws org.springframework.web.server.ResponseStatusException 404 si l'utilisateur n'existe pas,
      *         403 si l'appelant n'est pas autorisé à supprimer ce compte
      */
+    @RequiresAdminOrSelf
+    @Transactional
     public void deleteById(int id) {
-        Utilisateur utilisateur = utilisateurRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
-
-        if (!SecurityUtils.isUserAuthorizedAdminAndSelf(utilisateur)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès interdit");
-        }
-
         utilisateurRepository.deleteById(id);
     }
 }

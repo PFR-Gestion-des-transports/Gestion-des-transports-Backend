@@ -24,6 +24,6 @@ public class ReserverVehiculeServiceDTO {
     public LocalDateTime getDateHeureFin() { return dateHeureFin; }
     public void setDateHeureFin(LocalDateTime dateHeureFin) { this.dateHeureFin = dateHeureFin; }
 
-    public Integer getVehiculeId() { return vehiculeId; }
+    public int getVehiculeId() { return vehiculeId; }
     public void setVehiculeId(Integer vehiculeId) { this.vehiculeId = vehiculeId; }
 }
