@@ -8,10 +8,9 @@ import gestiontransports.enums.StatutReservation;
 import gestiontransports.model.Utilisateur;
 import gestiontransports.model.Vehicule;
 import gestiontransports.model.ReservationVehicule;
+import gestiontransports.aop.RequiresAdminOrSelf;
 import gestiontransports.repository.ReservationVehiculeRepository;
-import gestiontransports.repository.UtilisateurRepository;
 import gestiontransports.repository.VehiculeRepository;
-import gestiontransports.security.SecurityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,16 +31,13 @@ public class ReservationVehiculeService {
             List.of(StatutReservation.PAS_COMMENCEE, StatutReservation.COMMENCEE);
 
     private final ReservationVehiculeRepository reservationVehiculeRepository;
-    private final UtilisateurRepository utilisateurRepository;
     private final VehiculeRepository vehiculeRepository;
     private final UtilisateurContextService utilisateurContextService;
 
     public ReservationVehiculeService(ReservationVehiculeRepository reservationVehiculeRepository,
-                                      UtilisateurRepository utilisateurRepository,
                                       VehiculeRepository vehiculeRepository,
                                       UtilisateurContextService utilisateurContextService) {
         this.reservationVehiculeRepository = reservationVehiculeRepository;
-        this.utilisateurRepository = utilisateurRepository;
         this.vehiculeRepository = vehiculeRepository;
         this.utilisateurContextService = utilisateurContextService;
     }
@@ -139,17 +135,11 @@ public class ReservationVehiculeService {
      * @throws ResponseStatusException 404 si la réservation ou l'utilisateur est introuvable,
      *                                 403 si l'accès est interdit, 400 si les règles métier sont violées
      */
+    @RequiresAdminOrSelf(entity = ReservationVehicule.class)
     @Transactional
     public ReservationVehiculeDTO update(int id, ModifierReservationVehiculeDTO request) {
         ReservationVehicule reservation = reservationVehiculeRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Réservation introuvable"));
-
-        Utilisateur utilisateur = utilisateurRepository.findById(reservation.getUtilisateur().getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
-
-        if (!SecurityUtils.isUserAuthorizedAdminAndSelf(utilisateur)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès interdit");
-        }
 
         if (reservation.getStatutReservation() != StatutReservation.PAS_COMMENCEE) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Seule une réservation non commencée peut être modifiée");
@@ -171,17 +161,11 @@ public class ReservationVehiculeService {
      * @throws ResponseStatusException 404 si la réservation ou l'utilisateur est introuvable,
      *                                 403 si l'accès est interdit, 400 si le statut ne permet pas l'annulation
      */
+    @RequiresAdminOrSelf(entity = ReservationVehicule.class)
     @Transactional
     public void annuler(int id) {
         ReservationVehicule reservation = reservationVehiculeRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Réservation introuvable"));
-
-        Utilisateur utilisateur = utilisateurRepository.findById(reservation.getUtilisateur().getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
-
-        if (!SecurityUtils.isUserAuthorizedAdminAndSelf(utilisateur)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès interdit");
-        }
 
         switch (reservation.getStatutReservation()) {
             case COMMENCEE -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Impossible d'annuler une réservation en cours");

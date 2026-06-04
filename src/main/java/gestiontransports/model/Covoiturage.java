@@ -3,6 +3,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import gestiontransports.enums.StatutCovoiturage;
+import gestiontransports.interfaces.OwnedByUtilisateur;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
 
@@ -14,7 +15,7 @@ import jakarta.persistence.*;
  */
 @Entity
 @Table(name = "Covoiturage")
-public class Covoiturage {
+public class Covoiturage implements OwnedByUtilisateur {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -77,6 +78,7 @@ public class Covoiturage {
     public Set<ReservationCovoiturage> getReservations() { return reservations; }
     public void setReservations(Set<ReservationCovoiturage> reservations) { this.reservations = reservations; } 
 
+    @Override
     public Utilisateur getUtilisateur() { return utilisateur; }
     public void setUtilisateur(Utilisateur utilisateur) { this.utilisateur = utilisateur; }
 

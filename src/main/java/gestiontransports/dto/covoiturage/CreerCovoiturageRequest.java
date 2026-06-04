@@ -44,6 +44,6 @@ public class CreerCovoiturageRequest {
     public AdresseInputDTO getAdresseArrivee() { return adresseArrivee; }
     public void setAdresseArrivee(AdresseInputDTO adresseArrivee) { this.adresseArrivee = adresseArrivee; }
 
-    public Integer getVehiculeId() { return vehiculeId; }
+    public int getVehiculeId() { return vehiculeId; }
     public void setVehiculeId(Integer vehiculeId) { this.vehiculeId = vehiculeId; }
 }

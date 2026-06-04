@@ -1,6 +1,7 @@
 package gestiontransports.model;
 
 import gestiontransports.enums.StatutReservation;
+import gestiontransports.interfaces.OwnedByUtilisateur;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "ReservationVehicule")
-public class ReservationVehicule {
+public class ReservationVehicule implements OwnedByUtilisateur {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,6 +51,7 @@ public class ReservationVehicule {
     public StatutReservation getStatutReservation() { return statutReservation; }
     public void setStatutReservation(StatutReservation statutReservation) { this.statutReservation = statutReservation; }
 
+    @Override
     public Utilisateur getUtilisateur() { return utilisateur; }
     public void setUtilisateur(Utilisateur utilisateur) { this.utilisateur = utilisateur; }
 

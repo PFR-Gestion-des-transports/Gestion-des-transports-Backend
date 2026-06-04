@@ -8,8 +8,8 @@ import gestiontransports.enums.StatutCovoiturage;
 import gestiontransports.adapter.AdresseAdapter;
 import gestiontransports.dto.covoiturage.CreerCovoiturageRequest;
 import gestiontransports.dto.covoiturage.ModifierCovoiturageDTO;
+import gestiontransports.aop.RequiresAdminOrSelf;
 import gestiontransports.repository.VehiculeRepository;
-import gestiontransports.security.SecurityUtils;
 import gestiontransports.model.Adresse;
 import gestiontransports.model.Covoiturage;
 import gestiontransports.model.Utilisateur;
@@ -130,17 +130,13 @@ public class CovoiturageService {
      * @throws org.springframework.web.server.ResponseStatusException 404 si le covoiturage ou le véhicule est introuvable,
      *         403 si l'appelant n'est pas autorisé, 400 si le covoiturage est déjà terminé
      */
+    @RequiresAdminOrSelf(entity = Covoiturage.class)
     @Transactional
     public CovoiturageDTO update(int id, ModifierCovoiturageDTO request) {
     Covoiturage covoiturage = covoiturageRepository.findById(id)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Covoiturage introuvable"));
 
-
-        if(!SecurityUtils.isUserAuthorizedAdminAndSelf(covoiturage.getUtilisateur())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès refusé");
-        }
-
-        if(covoiturage.getStatut() == gestiontransports.enums.StatutCovoiturage.TERMINE) {
+        if (covoiturage.getStatut() == StatutCovoiturage.TERMINE) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Impossible de modifier un covoiturage terminé");
         }
 
@@ -188,14 +184,11 @@ public class CovoiturageService {
      * @throws org.springframework.web.server.ResponseStatusException 404 si le covoiturage est introuvable,
      *         403 si l'appelant n'est pas autorisé, 400 si la valeur dépasse {@code nbrPlaceInitial}
      */
+    @RequiresAdminOrSelf(entity = Covoiturage.class)
     @Transactional
     public CovoiturageDTO modifierPlaces(int id, ModifierPlacesCovoiturageDTO request) {
         Covoiturage covoiturage = covoiturageRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Covoiturage introuvable"));
-
-        if (!SecurityUtils.isUserAuthorizedAdminAndSelf(covoiturage.getUtilisateur())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès refusé");
-        }
 
         if (request.getNbrPlaceRestante() > covoiturage.getNbrPlaceInitial()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
@@ -215,14 +208,9 @@ public class CovoiturageService {
      * @throws org.springframework.web.server.ResponseStatusException 404 si le covoiturage est introuvable,
      *         403 si l'appelant n'est pas autorisé à supprimer cette annonce
      */
+    @RequiresAdminOrSelf(entity = Covoiturage.class)
+    @Transactional
     public void deleteById(int id) {
-        Covoiturage covoiturage = covoiturageRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Covoiturage introuvable"));
-
-        if (!SecurityUtils.isUserAuthorizedAdminAndSelf(covoiturage.getUtilisateur())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès refusé");
-        }
-
         covoiturageRepository.deleteById(id);
     }
 

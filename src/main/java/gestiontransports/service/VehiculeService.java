@@ -9,8 +9,8 @@ import gestiontransports.enums.Motorisation;
 import gestiontransports.enums.StatutVehicule;
 import gestiontransports.model.Utilisateur;
 import gestiontransports.model.Vehicule;
+import gestiontransports.aop.RequiresAdminOrSelf;
 import gestiontransports.repository.VehiculeRepository;
-import gestiontransports.security.SecurityUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -118,14 +118,10 @@ public class VehiculeService {
      * @throws org.springframework.web.server.ResponseStatusException 404 si le véhicule n'existe pas,
      *         403 si l'appelant n'est pas autorisé à consulter ce véhicule
      */
+    @RequiresAdminOrSelf(entity = Vehicule.class)
     public VehiculeDTO findById(int id) {
         Vehicule vehicule = vehiculeRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
-
-        if (!SecurityUtils.isUserAuthorizedAdminAndSelf(vehicule.getUtilisateur())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès interdit");
-        }
-
         return VehiculeAdapter.toDTO(vehicule);
     }
 
@@ -140,14 +136,11 @@ public class VehiculeService {
      * @throws org.springframework.web.server.ResponseStatusException 404 si le véhicule est introuvable,
      *         403 si l'appelant n'est pas autorisé, 409 si la nouvelle immatriculation est déjà utilisée par un autre véhicule
      */
+    @RequiresAdminOrSelf(entity = Vehicule.class)
     @Transactional
     public VehiculeDTO update(int id, ModifierVehiculeRequestDTO request) {
         Vehicule vehicule = vehiculeRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
-
-        if (!SecurityUtils.isUserAuthorizedAdminAndSelf(vehicule.getUtilisateur())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès interdit");
-        }
 
         if (vehiculeRepository.existsByImmatriculationAndIdNot(request.getImmatriculation(), id)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Immatriculation déjà utilisée");
@@ -180,13 +173,10 @@ public class VehiculeService {
      * @throws org.springframework.web.server.ResponseStatusException 404 si le véhicule est introuvable,
      *         403 si l'appelant n'est pas autorisé à modifier ce véhicule
      */
+    @RequiresAdminOrSelf(entity = Vehicule.class)
     public VehiculeDTO modifierStatut(int id, ModifierStatutVehiculeRequestDTO request) {
         Vehicule vehicule = vehiculeRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
-
-        if (!SecurityUtils.isUserAuthorizedAdminAndSelf(vehicule.getUtilisateur())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès interdit");
-        }
 
         vehicule.setStatutVehicule(request.getStatutVehicule());
 
@@ -202,19 +192,14 @@ public class VehiculeService {
      *         403 si l'appelant n'est pas autorisé à supprimer ce véhicule,
      *         409 si le véhicule possède des réservations actives
      */
-    public void delete(int id) {
-        Vehicule vehicule = vehiculeRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
-
-        if (!SecurityUtils.isUserAuthorizedAdminAndSelf(vehicule.getUtilisateur())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès interdit");
-        }
-
+    @RequiresAdminOrSelf(entity = Vehicule.class)
+    @Transactional
+    public void deleteById(int id) {
         if (!reservationVehiculeService.findActivesByVehiculeId(id).isEmpty()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "Impossible de supprimer un véhicule ayant des réservations actives");
         }
 
-        vehiculeRepository.delete(vehicule);
+        vehiculeRepository.deleteById(id);
     }
 }
