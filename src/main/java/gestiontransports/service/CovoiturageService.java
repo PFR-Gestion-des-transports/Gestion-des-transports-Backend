@@ -1,5 +1,10 @@
 package gestiontransports.service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
 import gestiontransports.adapter.CovoiturageAdapter;
 import gestiontransports.dto.covoiturage.CovoiturageDTO;
 import gestiontransports.repository.UtilisateurRepository;
@@ -63,32 +68,37 @@ public class CovoiturageService {
         Vehicule vehicule = vehiculeRepository.findById(request.getVehiculeId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
 
-    Adresse depart = adresseRepository
+        if(isAlreadyUseCar(vehicule, request.getDateHeureDebut())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ce véhicule est déjà utilisé pour un covoiturage à cette date et heure");
+        }
+
+        Adresse depart = adresseRepository
         .findByVilleAndRueAndNumeroRue(
             request.getAdresseDepart().getVille(),
             request.getAdresseDepart().getRue(),
             request.getAdresseDepart().getNumeroRue())
         .orElseGet(() -> adresseRepository.save(AdresseAdapter.toModel(request.getAdresseDepart())));
 
-    Adresse arrivee = adresseRepository
+        Adresse arrivee = adresseRepository
         .findByVilleAndRueAndNumeroRue(
             request.getAdresseArrivee().getVille(),
             request.getAdresseArrivee().getRue(),
             request.getAdresseArrivee().getNumeroRue())
         .orElseGet(() -> adresseRepository.save(AdresseAdapter.toModel(request.getAdresseArrivee())));
 
-    covoiturage.setAdresseDepart(depart);
-    covoiturage.setAdresseArrivee(arrivee);
-    covoiturage.setUtilisateur(utilisateur);
-    covoiturage.setVehicule(vehicule);
-    covoiturage.setStatut(StatutCovoiturage.PAS_COMMENCER);
+        covoiturage.setAdresseDepart(depart);
+        covoiturage.setAdresseArrivee(arrivee);
+        covoiturage.setUtilisateur(utilisateur);
+        covoiturage.setVehicule(vehicule);
+        covoiturage.setStatut(StatutCovoiturage.PAS_COMMENCER);
 
-    Covoiturage saved = covoiturageRepository.save(covoiturage);
-    return CovoiturageAdapter.toDTO(saved);
+        Covoiturage saved = covoiturageRepository.save(covoiturage);
+        return CovoiturageAdapter.toDTO(saved);
     }
 
     public CovoiturageDTO update(int id, ModifierCovoiturageDTO request) {
-    Covoiturage covoiturage = covoiturageRepository.findById(id)
+
+        Covoiturage covoiturage = covoiturageRepository.findById(id)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Covoiturage introuvable"));
 
 
@@ -96,44 +106,76 @@ public class CovoiturageService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès refusé");
         }
 
-        if(covoiturage.getStatut() == gestiontransports.enums.StatutCovoiturage.TERMINE) {
+        if(covoiturage.getStatut() == gestiontransports.enums.StatutCovoiturage.TERMINE || covoiturage.getStatut() == gestiontransports.enums.StatutCovoiturage.EN_COURS) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Impossible de modifier un covoiturage terminé");
         }
 
-        covoiturage.setNbrPlaceInitial(request.getNbrPlaceInitial());
-    covoiturage.setNbrPlaceRestante(request.getNbrPlaceRestante());
-    covoiturage.setDateHeureDebut(request.getDateHeureDebut());
+        if(isBeetwenOneDay(covoiturage.getDateHeureDebut())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Impossible de modifier un covoiturage déjà commencé");
+        }
 
-    Adresse depart = adresseRepository
+        covoiturage.setNbrPlaceInitial(request.getNbrPlaceInitial());
+        covoiturage.setNbrPlaceRestante(request.getNbrPlaceRestante());
+        covoiturage.setDateHeureDebut(request.getDateHeureDebut());
+
+        Adresse depart = adresseRepository
         .findByVilleAndRueAndNumeroRue(
             request.getAdresseDepart().getVille(),
             request.getAdresseDepart().getRue(),
             request.getAdresseDepart().getNumeroRue())
         .orElseGet(() -> adresseRepository.save(AdresseAdapter.toModel(request.getAdresseDepart())));
 
-    Adresse arrivee = adresseRepository
+        Adresse arrivee = adresseRepository
         .findByVilleAndRueAndNumeroRue(
             request.getAdresseArrivee().getVille(),
             request.getAdresseArrivee().getRue(),
             request.getAdresseArrivee().getNumeroRue())
         .orElseGet(() -> adresseRepository.save(AdresseAdapter.toModel(request.getAdresseArrivee())));
 
-    Vehicule vehicule = vehiculeRepository.findById(request.getVehiculeId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));
+        Vehicule vehicule = vehiculeRepository.findById(request.getVehiculeId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Véhicule introuvable"));       
 
-    covoiturage.setAdresseDepart(depart);
-    covoiturage.setAdresseArrivee(arrivee);
-    covoiturage.setVehicule(vehicule);
-    covoiturage.setStatut(request.getStatut());
-    Covoiturage updated = covoiturageRepository.save(covoiturage);
-    return CovoiturageAdapter.toDTO(updated);
+        if(isAlreadyUseCar(vehicule, request.getDateHeureDebut())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ce véhicule est déjà utilisé pour un covoiturage à cette date et heure");
+        }
+
+        covoiturage.setAdresseDepart(depart);
+        covoiturage.setAdresseArrivee(arrivee);
+        covoiturage.setVehicule(vehicule);
+        covoiturage.setStatut(request.getStatut());
+        Covoiturage updated = covoiturageRepository.save(covoiturage);
+        return CovoiturageAdapter.toDTO(updated);
     }
 
     public void deleteById(int id) {
-    if (!covoiturageRepository.existsById(id)) {
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Covoiturage introuvable");
+        if (!covoiturageRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Covoiturage introuvable");
+        }
+
+        Covoiturage covoiturage = covoiturageRepository.findById(id)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Covoiturage introuvable"));
+
+         if(!SecurityUtils.isUserAuthorizedAdminAndSelf(covoiturage.getUtilisateur())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Accès refusé");
+        }
+
+        if(covoiturage.getStatut() == gestiontransports.enums.StatutCovoiturage.TERMINE || covoiturage.getStatut() == gestiontransports.enums.StatutCovoiturage.EN_COURS) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Impossible de supprimer un covoiturage terminé ou en cours");
+        }
+        covoiturageRepository.deleteById(id);
     }
-    covoiturageRepository.deleteById(id);
+
+
+    private boolean isBeetwenOneDay(LocalDateTime dateHeureDebut) {
+        return ChronoUnit.DAYS.between(LocalDateTime.now(), dateHeureDebut) < 1;
     }
+
+    private boolean isAlreadyUseCar(Vehicule vehicule, LocalDateTime dateHeureDebut) {
+        return covoiturageRepository.existsByVehiculeAndDatesOverlapping(vehicule.getId(), dateHeureDebut);
+    }
+
+
+
+
 
 }
