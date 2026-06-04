@@ -17,11 +17,14 @@ public class ReservationCovoiturageAdapter {
      * @param reservation l'entité réservation à convertir
      * @return le DTO de sortie correspondant
      */
+
+
     public static ReservationCovoiturageDTO toDTO(ReservationCovoiturage reservation) {
         ReservationCovoiturageDTO dto = new ReservationCovoiturageDTO();
         dto.setId(reservation.getId());
         dto.setCovoiturage(CovoiturageAdapter.toDTO(reservation.getCovoiturage()));
         dto.setUtilisateur(UtilisateurAdapter.toDTO(reservation.getUtilisateur()));
+        dto.setStatut(reservation.getStatut());
         return dto;
     }
 }
