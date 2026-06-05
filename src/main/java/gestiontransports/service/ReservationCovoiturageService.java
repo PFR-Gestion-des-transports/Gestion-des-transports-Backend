@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import gestiontransports.dto.reservation.ReservationCovoiturageDTO;
 import gestiontransports.dto.reservation.CreerReservationCovoiturageDTO;
 import gestiontransports.dto.reservation.AnnulerReservationCovoiturageDTO;
+import gestiontransports.enums.StatutCovoiturage;
 import gestiontransports.enums.StatutReservation;
 import gestiontransports.model.ReservationCovoiturage;
 import gestiontransports.model.Utilisateur;
@@ -44,12 +45,24 @@ public class ReservationCovoiturageService {
 
         @Transactional
         public ReservationCovoiturageDTO create(CreerReservationCovoiturageDTO request) {
+
             ReservationCovoiturage reservation = new ReservationCovoiturage();
 
             Utilisateur utilisateur = utilisateurContextService.getCurrentUser();
             Covoiturage covoiturage = covoiturageRepository.findById(request.getCovoiturageId())
             .orElseThrow(() -> new RuntimeException("Covoiturage non trouvé avec l'id : " + request.getCovoiturageId()));
 
+            if(nombreDePlaceAtteint(covoiturage))
+            {
+                throw new RuntimeException("Réservation de covoiturage impossible car nombre de place attient !!!");
+            }
+
+            if(covoiturage.getStatut() == StatutCovoiturage.EN_COURS || covoiturage.getStatut() == StatutCovoiturage.TERMINE)
+            {
+                throw new RuntimeException("Réservation de covoiturage impossible car covoiturage en cours ou terminer !!!");
+            }
+
+            covoiturage.setNbrPlaceRestante(covoiturage.getNbrPlaceRestante() - 1);
             reservation.setCovoiturage(covoiturage);
             reservation.setUtilisateur(utilisateur);
             reservation.setStatut(StatutReservation.PAS_COMMENCEE);
@@ -63,6 +76,7 @@ public class ReservationCovoiturageService {
             ReservationCovoiturage reservation = reservationCovoiturageRepository.findById(request.getReservationId())
                 .orElseThrow(() -> new RuntimeException("Réservation de covoiturage non trouvée avec l'id : " + request.getReservationId()));
             reservation.setStatut(StatutReservation.ANNULEE);
+            reservation.getCovoiturage().setNbrPlaceRestante(reservation.getCovoiturage().getNbrPlaceRestante() + 1);
             ReservationCovoiturage updated = reservationCovoiturageRepository.save(reservation);
             return ReservationCovoiturageAdapter.toDTO(updated);
         }
@@ -72,6 +86,15 @@ public class ReservationCovoiturageService {
         if (!reservationCovoiturageRepository.existsById(id)) {
             throw new RuntimeException("Réservation de covoiturage non trouvée avec l'id : " + id);
         }
+        ReservationCovoiturage reservation = reservationCovoiturageRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Réservation de covoiturage non trouvée avec l'id : " + id));
+        reservation.getCovoiturage().setNbrPlaceRestante(reservation.getCovoiturage().getNbrPlaceRestante() + 1);
         reservationCovoiturageRepository.deleteById(id);
+    }
+
+
+
+    private boolean nombreDePlaceAtteint(Covoiturage covoiturage) {
+        return covoiturage.getNbrPlaceRestante() == 0;
     }
 }
