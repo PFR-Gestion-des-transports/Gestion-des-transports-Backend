@@ -3,6 +3,10 @@ package gestiontransports.dto.securite;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
+/**
+ * DTO d'entrée contenant les données d'inscription d'un nouvel utilisateur,
+ * reçu via POST /auth/inscription.
+ */
 public class CreerCompteRequestDTO {
 
     @NotBlank

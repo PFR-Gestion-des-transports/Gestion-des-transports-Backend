@@ -1,5 +1,6 @@
 package gestiontransports.security;
 
+import gestiontransports.service.TokenBlacklistService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,17 +15,31 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * Filtre HTTP exécuté une seule fois par requête, chargé d'intercepter le token JWT
+ * présent dans l'en-tête {@code Authorization}, de vérifier sa validité et son absence
+ * de la liste noire, puis d'alimenter le {@link SecurityContextHolder} avec l'authentification
+ * de l'utilisateur concerné.
+ */
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
+    private final TokenBlacklistService tokenBlacklistService;
 
-    public JwtFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService) {
+    public JwtFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService,
+                     TokenBlacklistService tokenBlacklistService) {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
+        this.tokenBlacklistService = tokenBlacklistService;
     }
 
+    /**
+     * Intercepte chaque requête HTTP, extrait et valide le token JWT de l'en-tête Authorization,
+     * vérifie qu'il n'est pas révoqué, puis alimente le {@link org.springframework.security.core.context.SecurityContextHolder}
+     * si le token est valide.
+     */
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
@@ -41,6 +56,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
         try {
             String email = jwtUtil.extractEmail(token);
+            String jti = jwtUtil.extractJti(token);
+
+            if (tokenBlacklistService.estRevoque(jti)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
 
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);

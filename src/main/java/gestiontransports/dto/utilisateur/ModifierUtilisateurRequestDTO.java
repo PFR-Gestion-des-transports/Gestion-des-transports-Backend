@@ -5,6 +5,10 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * DTO d'entrée pour la modification du profil d'un utilisateur existant,
+ * reçu via PUT /utilisateurs/{id}.
+ */
 public class ModifierUtilisateurRequestDTO {
 
     @NotBlank

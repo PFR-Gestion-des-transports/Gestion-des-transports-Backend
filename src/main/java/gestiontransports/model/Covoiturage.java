@@ -3,12 +3,19 @@ import java.util.HashSet;
 import java.util.Set;
 
 import gestiontransports.enums.StatutCovoiturage;
+import gestiontransports.interfaces.OwnedByUtilisateur;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
 
+/**
+ * Entité représentant un trajet de covoiturage d'entreprise, avec ses adresses de départ et
+ * d'arrivée, ses places disponibles, sa date de départ, le conducteur et le véhicule utilisé.
+ * Un covoiturage peut avoir plusieurs réservations et évolue à travers différents statuts
+ * (ex. : OUVERT, EN_COURS, TERMINE, ANNULE).
+ */
 @Entity
 @Table(name = "Covoiturage")
-public class Covoiturage {
+public class Covoiturage implements OwnedByUtilisateur {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +49,11 @@ public class Covoiturage {
     @Column(name = "Statut", nullable = false, length = 50)
     private StatutCovoiturage statut;
 
+    @ManyToOne
+    @JoinColumn(name = "vehicule", nullable = false)
+    private Vehicule vehicule;
+
+
 
     public Covoiturage() {}
 
@@ -66,9 +78,13 @@ public class Covoiturage {
     public Set<ReservationCovoiturage> getReservations() { return reservations; }
     public void setReservations(Set<ReservationCovoiturage> reservations) { this.reservations = reservations; } 
 
+    @Override
     public Utilisateur getUtilisateur() { return utilisateur; }
     public void setUtilisateur(Utilisateur utilisateur) { this.utilisateur = utilisateur; }
 
     public StatutCovoiturage getStatut() { return statut; }
     public void setStatut(StatutCovoiturage statut) { this.statut = statut; }
+
+    public Vehicule getVehicule() { return vehicule; }
+    public void setVehicule(Vehicule vehicule) { this.vehicule = vehicule; }
 }

@@ -3,6 +3,10 @@ package gestiontransports.dto.securite;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
+/**
+ * DTO d'entrée contenant les identifiants de connexion (email et mot de passe),
+ * reçu via POST /auth/connexion.
+ */
 public class ConnexionRequestDTO {
 
     @NotBlank

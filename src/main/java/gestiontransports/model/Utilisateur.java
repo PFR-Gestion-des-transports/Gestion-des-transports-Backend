@@ -2,15 +2,21 @@ package gestiontransports.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import gestiontransports.enums.Role;
+import gestiontransports.interfaces.OwnedByUtilisateur;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Entité représentant un collaborateur de l'entreprise, qui peut être passager, conducteur
+ * ou administrateur. Chaque utilisateur possède une adresse, un ensemble de rôles, et peut
+ * être associé à des réservations, des covoiturages créés et des véhicules déclarés.
+ */
 @Entity
 @Table(name = "Utilisateur")
-public class Utilisateur {
+public class Utilisateur implements OwnedByUtilisateur {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +49,9 @@ public class Utilisateur {
     @OneToMany(mappedBy = "utilisateur")
     private List<Vehicule> vehicules = new ArrayList<>();
 
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReservationVehicule> reservationsVehicule = new ArrayList<>();
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "utilisateur_roles", joinColumns = @JoinColumn(name = "utilisateur_id"))
     @Column(name = "role")
@@ -50,6 +59,9 @@ public class Utilisateur {
     private Set<Role> roles = new HashSet<>();
 
     public Utilisateur() {}
+
+    @Override
+    public Utilisateur getUtilisateur() { return this; }
 
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
@@ -74,4 +86,7 @@ public class Utilisateur {
 
     public List<Vehicule> getVehicules() { return vehicules; }
     public void setVehicules(List<Vehicule> vehicules) { this.vehicules = vehicules; }
+
+    public List<ReservationVehicule> getReservationsVehicule() { return reservationsVehicule; }
+    public void setReservationsVehicule(List<ReservationVehicule> reservationsVehicule) { this.reservationsVehicule = reservationsVehicule; }
 }
