@@ -39,6 +39,9 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: mvn -B clean package -DskipTests
 
+      - name: Générer le site Maven
+        run: mvn site
+
       - name: Analyser avec CodeQL
         uses: github/codeql-action/analyze@v4
 
