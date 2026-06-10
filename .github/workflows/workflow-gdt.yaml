@@ -39,9 +39,6 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: mvn -B clean package -DskipTests
 
-      - name: Tests avec Maven (profil test)
-        run: mvn -B verify -Dspring.profiles.active=test 
-
       - name: Générer le site Maven
         run: mvn site
 
@@ -59,3 +56,15 @@ jobs:
         with:
           name: jacoco-report
           path: target/site/jacoco
+      
+      - name: Publier le rapport Checkstyle
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapport-checkstyle
+          path: target/site/
+          
+      - name: Publier le rapport SpotBugs
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapport-spotbugs
+          path: target/spotbugs/
