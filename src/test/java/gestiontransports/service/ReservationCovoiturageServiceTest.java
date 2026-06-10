@@ -1,8 +1,6 @@
 package gestiontransports.service;
 
-import gestiontransports.dto.reservation.AnnulerReservationCovoiturageDTO;
-import gestiontransports.dto.reservation.CreerReservationCovoiturageDTO;
-import gestiontransports.dto.reservation.ReservationCovoiturageDTO;
+import gestiontransports.dto.reservation.*;
 import gestiontransports.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
