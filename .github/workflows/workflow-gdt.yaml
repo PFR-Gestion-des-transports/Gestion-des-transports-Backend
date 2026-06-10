@@ -39,6 +39,9 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: mvn -B clean package -DskipTests
 
+      - name: Tests avec Maven (profil test)
+        run: mvn -B verify -Dspring.profiles.active=test 
+
       - name: Générer le site Maven
         run: mvn site
 
