@@ -32,6 +32,11 @@ jobs:
           languages: java-kotlin
 
       - name: Build avec Maven
+        env:
+          SPRING_DATASOURCE_URL: ${{ secrets.DB_URL }}
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.DB_USERNAME }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: mvn -B clean package -DskipTests
 
       - name: Analyser avec CodeQL
