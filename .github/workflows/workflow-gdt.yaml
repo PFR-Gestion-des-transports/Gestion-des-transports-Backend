@@ -11,20 +11,27 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      security-events: write # pour la mise à jour de l'onglet Security and quality
-      contents: read # lire le code source
-    
-    steps:
-    # Mettre les steps checkout et setup-java
-    
-    
-    - name: Initialiser CodeQL
-      uses: github/codeql-action/init@v4
-      with:
-        languages: java-kotlin
+      security-events: write
+      contents: read
 
-    - name: Construire avec Maven
-      run: mvn -B clean package -DskipTests
-      
-    - name: Analyser avec CodeQL
-      uses: github/codeql-action/analyze@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Initialiser CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: java-kotlin
+
+      - name: Build avec Maven
+        run: mvn -B clean package -DskipTests
+
+      - name: Analyser avec CodeQL
+        uses: github/codeql-action/analyze@v4
