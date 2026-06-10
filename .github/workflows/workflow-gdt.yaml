@@ -42,3 +42,12 @@ jobs:
         with:
           name: codeql-results
           path: results/codeql.csv
+
+      - name: Construire avec Maven
+        run: mvn -B clean verify -Dspring.profiles.active=test      
+      
+      - name: Sauvegarder le rapport JaCoCo
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco
