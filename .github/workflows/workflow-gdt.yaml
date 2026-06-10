@@ -36,3 +36,9 @@ jobs:
 
       - name: Analyser avec CodeQL
         uses: github/codeql-action/analyze@v4
+
+      - name: "Télécharger les résultats CodeQL"
+        uses: actions/upload-artifact@v4
+        with:
+          name: codeql-results
+          path: results/codeql.csv
